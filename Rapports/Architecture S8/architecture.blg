@@ -1,0 +1,9 @@
+[4] Config.pm:354> INFO - This is Biber 2.7
+[4] Config.pm:357> INFO - Logfile is 'architecture.blg'
+[97] biber-darwin:303> INFO - === Sun Mar 25, 2018, 22:53:53
+[165] Biber.pm:359> INFO - Reading 'architecture.bcf'
+[420] Biber.pm:835> INFO - Found 0 citekeys in bib section 0
+[433] Utils.pm:164> WARN - The file 'architecture.bcf' does not contain any citations!
+[447] bbl.pm:608> INFO - Writing 'architecture.bbl' with encoding 'UTF-8'
+[447] bbl.pm:712> INFO - Output to architecture.bbl
+[447] Biber.pm:109> INFO - WARNINGS: 1
