@@ -51,7 +51,8 @@ const char *fractal_get_name(const struct fractal *f)
 int fractal_get_value(const struct fractal *f, int x, int y)
 {
     /* TODO */
-    return 0;
+    
+    return f->values[x][y];
 }
 
 void fractal_set_value(struct fractal *f, int x, int y, int val)
@@ -64,20 +65,27 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
 int fractal_get_width(const struct fractal *f)
 {
     /* TODO */
+    
     return f->theWidth;
 }
 
 int fractal_get_height(const struct fractal *f)
 {
+    /* TODO */
+    
     return f->theHeight;
 }
 
 double fractal_get_a(const struct fractal *f)
 {
+    /* TODO */
+    
     return f->theA;
 }
 
 double fractal_get_b(const struct fractal *f)
 {
+    /* TODO */
+    
     return f->theB;
 }
