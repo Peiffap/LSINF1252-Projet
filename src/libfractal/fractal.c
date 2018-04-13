@@ -17,8 +17,6 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
     data = malloc(width * sizeof(int *)); // Pointer vector
     int i;
     for (i = 0; i < width; i++)
-        
-        //coucou
     {
         data[i] = malloc(height * sizeof(int)); // Allocate each entry in the array allocated above
     }
