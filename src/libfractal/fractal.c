@@ -45,9 +45,7 @@ const char *fractal_get_name(const struct fractal *f)
 {
     /* TODO */
     
-    
-    
-    return NULL;
+    return f->theName;
 }
 
 int fractal_get_value(const struct fractal *f, int x, int y)
@@ -60,8 +58,7 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
     /* TODO */
     
-    f->
-    
+    f->values[x][y] = val;
 }
 
 int fractal_get_width(const struct fractal *f)
