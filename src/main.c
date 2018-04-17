@@ -46,7 +46,7 @@ int main(int argc, const char *argv[])
     
     
     
-    // If one of the input files is -, the use will be inputting fractals from the command line
+    // If one of the input files is -, the user will be inputting fractals from the command line
     int i;
     for (i = searchIndex; i < argc - 1; ++i){
         if (strcmp(argv[i], "-") == 0)
