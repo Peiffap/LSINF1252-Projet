@@ -28,7 +28,7 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
         return NULL;
     }
     int i;
-    for (i = 0; i < width; i++)
+    for (i = 0; i < width; ++i)
     {
         data[i] = malloc(height * sizeof(int)); // Allocate each entry in the array allocated above
         if (data[i] == NULL)
@@ -48,7 +48,7 @@ void fractal_free(struct fractal *f)
     free(f->theName); // Free name field
     
     int i;
-    for (i = 0; i < f->theWidth; i++)
+    for (i = 0; i < f->theWidth; ++i)
     {
         free(f->values[i]); // For every allocated pointer in the pointer vector, free that pointer
     }
