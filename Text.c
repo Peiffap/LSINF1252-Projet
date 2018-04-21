@@ -73,7 +73,7 @@ int read_file(char *filename){
                     i=-1;
                 }
             }
-        
+            
             pthread_mutex_unlock(&mutex);
             sem_post(&full);
         }
@@ -127,7 +127,7 @@ struct fractal* read_line(char *line){
         else if(i==4){
             b = strtod(istr, (char **) NULL);
         }
-       
+        
         istr = strtok (NULL,sep);
     }
     return struct fractal *fractal_new(name, width, height, a, b);
