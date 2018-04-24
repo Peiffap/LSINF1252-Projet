@@ -1,43 +1,6 @@
 
 #include "Text.h"
 
-int global NTHREADS; // donnees pendant l'appel du programme (TO DO)
-struct fractal *buffer[NTHREADS+1]; //buffer pour stocker les fractal
-pthread_t thread[NTHREADS]; //nombre de thread qu'on lance par fichier
-
-
-pthread_mutex_t mutex;
-sem_t empty;
-sem_t full;
-
-//j'ai mit un main, mais il est évidement pas complet;
-//il y a juste une partie que j'en avait besoin pour faire la fonction read_file
-
-
-int main (int argc, char *argv[])  {
-    
-    //initialisation de mutex
-    pthread_mutex_init(&mutex, NULL);
-    sem_init(&empty, 0 , NTHREADS+1);
-    sem_init(&full, 0 , 0);
-    
-    //creation des threads; argc[i+1] c'est les arguments pour la fonction read_file càd les fichirs qu'on doit lire
-    for(int i=0;i<NTHREADS;i++){
-        err=pthread_create(&(thread[i]),NULL,&read_file,argc[i+1]);
-        if(err!=0){
-            error(err,"pthread_create");
-        }
-    }
-    
-    //join le thread
-    for(int i=NTHREADS-1;i>=0;i--) {
-        err=pthread_join(thread[i],NULL);
-        if(err!=0){
-            error(err,"pthread_join");
-        }
-    }
-}
-
 int read_file(char *filename){
     
     //ouvre le fichier
@@ -61,7 +24,7 @@ int read_file(char *filename){
         struct fractal newFractal = read_line(line);
         if(newFractal != NULL){
             
-            //met la nouvelle structure dans le buffer;
+            //met la nouvelle struct fractal dans le buffer;
             sem_wait(&empty);
             pthread_mutex_lock(&mutex);
             
