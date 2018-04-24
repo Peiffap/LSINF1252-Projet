@@ -23,6 +23,8 @@ int main(int argc, const char *argv[])
     int searchIndex = 1; // Index to search for arguments in argv
     int maxThreads = 7; // Test for optimal number of threads
     
+    int maxAverage = 0; // contient la valeur maximal de la moyenne des valeurs de chaque point
+    
     
     
     // [--maxthreads n] can be the second and third arguments (first argument being the name of the program) or the third and fourth (because -d might take up one spot)
@@ -60,30 +62,56 @@ int main(int argc, const char *argv[])
         }
     }
     
+    
+    
     struct fractal *buffer[maxThreads+1]; //buffer pour stocker les fractals
     int numberFile = argc-1-searchIndex; //nombre de fichiers qu'on aura
-    pthread_t thread[numberFile]; //nombre de thread qu'on lance par fichier
+    pthread_t threadRead[numberFile]; //nombre de thread qu'on lance par fichier
+    pthread_t threadCount[maxThreads]; //nombre de thread qu'on lance par fichier
+
+
     
-    //initialisation de mutex
+    //initialisation de mutex;
     pthread_mutex_init(&mutex, NULL);
     sem_init(&empty, 0 , maxThreads+1);
     sem_init(&full, 0 , 0);
     
-    //creation des threads;
+    //creation des threads, un thread par fichier;
     for(int i=0;i<numberFile;i++){
-        err=pthread_create(&(thread[i]),NULL,&read_file,argc[searchIndex+i]);
+        err=pthread_create(&(threadRead[i]),NULL,&read_file,argc[searchIndex+i]);
         if(err!=0){
             error(err,"pthread_create");
         }
     }
     
-    //join thread
+    
+    
+    //creation des threads de calcules;
+    for(int i=0;i<maxThreads;i++){
+        err=pthread_create(&(threadCount[i]),NULL,&count,NULL);
+        if(err!=0){
+            error(err,"pthread_create");
+        }
+    }
+    
+    
+    
+    //join thread de lecture
     for(int i=numberFile-1;i>=0;i--) {
-        err=pthread_join(thread[i],NULL);
+        err=pthread_join(threadRead[i],NULL);
         if(err!=0){
             error(err,"pthread_join");
         }
     }
+    
+    //join thread de clacule
+    for(int i=maxThreads-1;i>=0;i--) {
+        err=pthread_join(threadCount[i],NULL);
+        if(err!=0){
+            error(err,"pthread_join");
+        }
+    }
+    
     
     
     return 0;

@@ -1,7 +1,7 @@
 
 #include "Text.h"
 
-int read_file(char *filename){
+void read_file(char *filename){
     
     //ouvre le fichier
     int fd=open(filename,O_RDONLY);
@@ -21,7 +21,7 @@ int read_file(char *filename){
     }
     for(r!=0){
         //création d'une nouvelle structure fractal;
-        struct fractal newFractal = read_line(line);
+        struct fractal *newFractal = read_line(line);
         if(newFractal != NULL){
             
             //met la nouvelle struct fractal dans le buffer;
@@ -31,7 +31,7 @@ int read_file(char *filename){
             //cherche laquelle partie de buffer est vide et y place la nouvelle fractal;
             //je mets i=-1 pour sortir de la boucle dès que la place libre est trouvée;
             for(int i=0; i<=NTHREADS && i!=-1; i++){
-                if(*buffer[i]==NULL){
+                if(buffer[i]==NULL){
                     buffer[i]=newFractal;
                     i=-1;
                 }
@@ -51,6 +51,7 @@ int read_file(char *filename){
         perror("close file");
         exit(EXIT_FAILURE);
     }
+    
 }
 
 //lit la ligne  et retourne la structure fractal, NULL si la ligne commence pas # ou la ligne est vide
@@ -95,5 +96,49 @@ struct fractal* read_line(char *line){
     }
     return struct fractal *fractal_new(name, width, height, a, b);
 }
+
+int count(){
     
+    struct fractal *newFractal;
+    int sumVal=0;
+    int average;
+    
+    sem_wait(&full);
+    pthread_mutex_lock(&mutex);
+    
+    //prends le premier struct trouvé;
+    //je mets i=-1 pour sortir de la boucle dès que la place libre est trouvée;
+    for(int i=0; i<=NTHREADS && i!=-1; i++){
+        if(buffer[i]!=NULL){
+            newFractal=buffer[i];
+            i=-1;
+        }
+    }
+    
+    pthread_mutex_unlock(&mutex);
+    sem_post(&empty);
+    
+    //calcule la valeur pour chaque pixel
+    int width = fractal_get_width(newFractal);
+    int height = fractal_get_height(newFractal);
+    int totalPixel = width*height;
+    for (int x = 0; x<width; x++) {
+        for (int y = 0; y < height; y++) {
+            int val = fractal_compute_value(newFractal, x, y);
+            void fractal_set_value(newFractal, x, y, val);
+            sumVal += val;
+        }
+    }
+    
+    average = sumVal/totalPixel;
+    
+    if(average<maxAverage){
+        //ajouter cette fractal dans la liste chainée
+        //TO DO(créer struct de la liste chianée)
+        
+    }
+    
+}
+
+
 
