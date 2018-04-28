@@ -29,6 +29,8 @@ int main(int argc, const char *argv[])
     int maxThreads = NUMBER_OF_THREADS; // Test for optimal number of threads.
     bool assignedMaxThreads = false;
     
+    int nInputFiles = 0; // Number of input files (therefore including command line input as an " input file", if input is to be read from there).
+    
     int i;
     // Stop iterating once the loop reaches the output file which is always last or when the 3 modifiers have been set already, therefore not needing to iterate any longer.
     for (i = 1; i < argc - 1 && (!commandLineInput && !generateAll && !assignedMaxThreads); ++i)
@@ -37,6 +39,7 @@ int main(int argc, const char *argv[])
         if (strcmp(argv[i], hyphenArg) == 0)
         {
             commandLineInput = true;
+            ++nInputFiles;
         }
         // [-d] is an argument determining whether all the input fractals need to be transformed into .bmp files by setting the value of the generateAll boolean.
         else if (strcmp(argv[i], dArg) == 0)
@@ -51,24 +54,29 @@ int main(int argc, const char *argv[])
             ++i;
             assignedMaxThreads = true;
         }
+        // If the argument isn't a modifier, it must be an input file.
+        else
+        {
+            ++nInputFiles;
+        }
     }
     
+    nInputFiles += argc - i; // Add eventual files that the for loop didn't reach because all modifiers were found.
     
-    
-    struct fractal *buffer[maxThreads+1]; //buffer pour stocker les fractals
-    int numberFile = argc-1-searchIndex; //nombre de fichiers qu'on aura
-    pthread_t threadRead[numberFile]; //nombre de thread qu'on lance par fichier
-    pthread_t threadCount[maxThreads]; //nombre de thread qu'on lance par fichier
+    struct fractal *buffer[maxThreads + 1]; // Buffer to store fractals.
+    pthread_t threadRead[nInputFiles]; // One thread for every input file.
+    pthread_t threadCount[maxThreads]; // Threads per file.
 
 
     
-    //initialisation de mutex;
+    // Initialising mutexes and semaphores.
     pthread_mutex_init(&mutex, NULL);
-    sem_init(&empty, 0 , maxThreads+1);
-    sem_init(&full, 0 , 0);
+    sem_init(&empty, 0, maxThreads + 1);
+    sem_init(&full, 0, 0);
     
-    //creation des threads, un thread par fichier;
-    for(int i=0;i<numberFile;i++){
+    // Creating threads (one for every file).
+    for(i = 0; i < nInputFiles; ++i)
+    {
         err=pthread_create(&(threadRead[i]),NULL,&read_file,argc[searchIndex+i]);
         if(err!=0){
             error(err,"pthread_create");
@@ -88,7 +96,7 @@ int main(int argc, const char *argv[])
     
     
     //join thread de lecture
-    for(int i=numberFile-1;i>=0;i--) {
+    for(int i=nInputFiles-1;i>=0;i--) {
         err=pthread_join(threadRead[i],NULL);
         if(err!=0){
             error(err,"pthread_join");
