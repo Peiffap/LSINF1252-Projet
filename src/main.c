@@ -14,6 +14,10 @@ bool generateAll = false; // Determines whether all .bmp files need to be genera
 bool commandLineInput = false; // Determines whether the user is gonna enter fractals from the command line.
 
 
+pthread_mutex_t mutex;
+sem_t empty;
+sem_t full;
+
 int main(int argc, const char *argv[])
 {
     /* TODO */
@@ -46,6 +50,56 @@ int main(int argc, const char *argv[])
             maxThreads = fmax(1, (int) strtol(argv[i + 1], (char **) NULL, 10));
             ++i;
             assignedMaxThreads = true;
+        }
+    }
+    
+    
+    
+    struct fractal *buffer[maxThreads+1]; //buffer pour stocker les fractals
+    int numberFile = argc-1-searchIndex; //nombre de fichiers qu'on aura
+    pthread_t threadRead[numberFile]; //nombre de thread qu'on lance par fichier
+    pthread_t threadCount[maxThreads]; //nombre de thread qu'on lance par fichier
+
+
+    
+    //initialisation de mutex;
+    pthread_mutex_init(&mutex, NULL);
+    sem_init(&empty, 0 , maxThreads+1);
+    sem_init(&full, 0 , 0);
+    
+    //creation des threads, un thread par fichier;
+    for(int i=0;i<numberFile;i++){
+        err=pthread_create(&(threadRead[i]),NULL,&read_file,argc[searchIndex+i]);
+        if(err!=0){
+            error(err,"pthread_create");
+        }
+    }
+    
+    
+    
+    //creation des threads de calcules;
+    for(int i=0;i<maxThreads;i++){
+        err=pthread_create(&(threadCount[i]),NULL,&count,NULL);
+        if(err!=0){
+            error(err,"pthread_create");
+        }
+    }
+    
+    
+    
+    //join thread de lecture
+    for(int i=numberFile-1;i>=0;i--) {
+        err=pthread_join(threadRead[i],NULL);
+        if(err!=0){
+            error(err,"pthread_join");
+        }
+    }
+    
+    //join thread de clacule
+    for(int i=maxThreads-1;i>=0;i--) {
+        err=pthread_join(threadCount[i],NULL);
+        if(err!=0){
+            error(err,"pthread_join");
         }
     }
     
