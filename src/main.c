@@ -22,6 +22,8 @@ int hyphenPosition = 0; // Determines whether the user is gonna enter fractals f
 
 fractal *buffer[BUFFER_SIZE]; // Buffer to store fractals.
 
+int nAddedFractals = 0; // Number of fractals that have been added to the buffer.
+
 int main(int argc, const char *argv[])
 {
     // Possible arguments for the program call.
@@ -149,9 +151,10 @@ void * readConsoleInput()
         
         struct fractal *fract = lineToFractal(fractalLine);
         
+        // Make sure that the different producer threads aren't overwriting each other and thus missing fractals.
         sem_wait(&empty);
         pthread_mutex_lock(&mutex);
-        addToBuffer(fract);
+        addToBuffer(fract); // Adds the newly read fractal to the buffer.
         pthread_mutex_unlock(&mutex);
         sem_post(&full);
         
@@ -165,7 +168,9 @@ void * readConsoleInput()
 
 /**
  * This function takes a string describing a fractal as input and returns the fractal described by that line.
+ *
  * @param line is a string describing a fractal. The order in which the fractal's attributes should be is name-height-width-a-b, where the hyphens should be replaced by regular spaces.
+ *
  * @return NULL if the function encounters an error, otherwise a pointer to a fractal struct with the correct attributes.
  */
 struct fractal *lineToFractal(char *line){
@@ -184,15 +189,19 @@ struct fractal *lineToFractal(char *line){
 }
 
 /**
+ * Adds a fractal to the buffer so that consumer threads can access it.
  *
+ * @param fract the fractal to be added to the buffer.
  */
 void addToBuffer (fractal fract) {
     struct fractal *runner = buffer; // Iterator to run through the buffer.
     
     int i;
-    for (i = 0; fractal_get_height(runner) != 0 && i < BUFFER_SIZE; ++i) {
-        current++;
+    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going.
+    for (i = 0; fractal_get_computed(runner) == 0 && i < BUFFER_SIZE; ++i) {
+        runner++;
     }
-    *current = fractal;
-    fractal_add++;
+    // Once the loop's exit condition gets reached, the runner fractal points to a previously computed fractal, which we can overwrite.
+    *runner = fractal;
+    ++nAddedFractals; // An extra fractal has been added.
 }
