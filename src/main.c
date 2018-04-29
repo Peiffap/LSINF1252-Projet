@@ -13,6 +13,7 @@
 #include "libfractal/fractal.h"
 
 pthread_mutex_t bufferMutex; // Mutex to control buffer access.
+pthread_mutex_t bestMutex; // Mutex to control access to the best fractal value.
 sem_t empty; // Determines whether the consumer threads can do calculations on a fractal from the buffer.
 sem_t full; // Determines whether the producer threads can add another thread to the buffer.
 
@@ -21,8 +22,10 @@ int maxThreadsPosition = 0; // Determines whether the user has set a maximum num
 int hyphenPosition = 0; // Determines whether the user is gonna enter fractals from the command line.
 
 fractal *buffer[BUFFER_SIZE]; // Buffer to store fractals.
+fractal *bestFractal; // Fractal with highest average number of iterations.
 
 int nAddedFractals = 0; // Number of fractals that have been added to the buffer.
+int nComputedFractals = 0; // Number of fractals whose values have been computed.
 
 int main(int argc, const char *argv[])
 {
@@ -161,7 +164,23 @@ void *computeFractal()
     double avg = (double) avg / (double) (width * height); // Computes the average number of iterations for a given fractal.
     fractal_set_average(fract, avg); // Stores this average value in the fractal's average attribute.
     
+    // If dPosition isn't equal to zero then it means the [-d] was present and that all a .bmp file should be generated for every fractal.
     if (dPosition != 0)
+    {
+        write_bitmap_sdl(fract, fractal_get_name(fract));
+    }
+    
+    pthread_mutex_lock(&bestMutex);
+    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
+    if (avg > fractal_get_average(bestFractal))
+    {
+        *bestFractal = *fract;
+    }
+    ++nComputedFractals; // An extra fractal has been computed.
+    pthread_mutex_unlock(&bestMutex);
+    
+    free(fract);
+    return NULL;
 }
 
 /**
@@ -301,6 +320,6 @@ struct fractal *pickFromBuffer()
     }
     // Once the loop's exit condition gets reached, the runner fractal points to a non-computed fractal, which we can then compute.
     *fract = *runner;
-    fractal_set_computed(runner, 1); // The chosen fractal is now (about to be) computed.
+    fractal_set_computed(runner, 1); // The chosen fractal is now (about to be) computed, so it can be considered as computed.
     return *fract;
 }
