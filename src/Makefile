@@ -6,7 +6,7 @@
 # définition des variables
 CC = gcc
 CFLAGS = -Wall -lpthread
-EXEC=hello
+EXEC=main
  
  
 
