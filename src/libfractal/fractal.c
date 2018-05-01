@@ -70,6 +70,11 @@ void fractal_set_value(struct fractal *f, int x, int y, int val)
     f->values[x][y] = val;
 }
 
+int fractal_get_height(const struct fractal *f)
+{
+    return f->theHeight;
+}
+
 int fractal_get_width(const struct fractal *f)
 {
     return f->theWidth;
@@ -93,11 +98,6 @@ double fractal_get_average(const struct fractal *f)
 void fractal_set_average(const struct fractal *f, double avg)
 {
     f->average = avg;
-}
-
-int fractal_get_height(const struct fractal *f)
-{
-    return f->theHeight;
 }
 
 double fractal_get_a(const struct fractal *f)
