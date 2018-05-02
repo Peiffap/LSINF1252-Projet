@@ -85,7 +85,7 @@ int fractal_get_computed(const struct fractal *f)
     return f->computed;
 }
 
-void fractal_set_computed(const struct fractal *f, int comp)
+void fractal_set_computed(struct fractal *f, int comp)
 {
     f->computed = comp;
 }
@@ -95,7 +95,7 @@ double fractal_get_average(const struct fractal *f)
     return f->average;
 }
 
-void fractal_set_average(const struct fractal *f, double avg)
+void fractal_set_average(struct fractal *f, double avg)
 {
     f->average = avg;
 }

@@ -81,7 +81,7 @@ int fractal_get_computed(const struct fractal *f);
  * @f: fractale
  * @comp: the value to which the computed field is to be set,
  */
-void fractal_set_computed(const struct fractal *f, int comp);
+void fractal_set_computed(struct fractal *f, int comp);
 
 /*
  * fractal_get_average: returns the average value of the number of iterations for a fractal.
@@ -97,7 +97,7 @@ double fractal_get_average(const struct fractal *f);
  * @f: fractale
  * @avg: the average number of iterations for a fractal.
  */
-void fractal_set_average(const struct fractal *f, double avg);
+void fractal_set_average(struct fractal *f, double avg);
 
 /*
  * fractal_get_height: retourne la hauteur de l'image de la fractale
