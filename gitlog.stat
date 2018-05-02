@@ -1,0 +1,426 @@
+commit 7d4e66236e0d6c8ca29e77db0bd38198e61d3f17
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Wed May 2 19:52:59 2018 +0200
+
+    Formatting fix.
+
+ src/main.c | 85 +++++++++++++++++++++++++++++++-------------------------------
+ 1 file changed, 42 insertions(+), 43 deletions(-)
+
+commit 062457aaa5988b4eb60129fd521a491070e08fc7
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-335.sri.ucl.ac.be>
+Date:   Wed May 2 15:17:16 2018 +0200
+
+    correction des erreurs dans le fractal.h
+
+ src/libfractal/fractal.c | 4 ++--
+ src/libfractal/fractal.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 968bc62fe37eca18256444e66c1b6ebb3a32eb65
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-90.sri.ucl.ac.be>
+Date:   Tue May 1 19:09:25 2018 +0200
+
+    correction des erreurs dans le main
+
+ .DS_Store                | Bin 6148 -> 8196 bytes
+ src/.DS_Store            | Bin 6148 -> 6148 bytes
+ src/libfractal/fractal.c |  10 +-
+ src/libfractal/fractal.h |  22 +--
+ src/main.c               | 358 ++++++++++++++++++++++++-----------------------
+ 5 files changed, 202 insertions(+), 188 deletions(-)
+
+commit 7e533d7865ad5841e6c2a8de4462d95131fc06c5
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 16:24:25 2018 +0200
+
+    Fixes
+
+ .DS_Store | Bin 6148 -> 6148 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 2c67d8a51c66d4b77f731f8c03a3dc00dfa1bb01
+Author: Gilles Peiffer <gilles.peiffer@outlook.com>
+Date:   Sun Apr 29 15:50:47 2018 +0200
+
+    Fix makefile (hello -> main)
+    
+    For some reason this didn't seem to work
+
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 1b37668f9de332f82d89a4d50720d607784358f7
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 15:48:26 2018 +0200
+
+    Finished the consumer function, and added a way to keep track of the single best current fractal.
+
+ src/main.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+commit 22974219cd65dc9c5968fb7e9a565158114cd548
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 15:17:32 2018 +0200
+
+    Changed the interactions with the average attribute of a fractal, and corrected some getters/setters.
+
+ src/libfractal/fractal.c | 19 +++++++++++++++----
+ src/libfractal/fractal.h | 19 ++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 5 deletions(-)
+
+commit d20a249dcb03d8735d8ecbbfdba4dadbdcadb8c1
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 15:08:26 2018 +0200
+
+    Finished stdin producer, producer, work on consumer. Added an attribute to store the average value of the number of iterations for a certain fractal. Also wrote another buffer interaction function that picks a fractal from the buffer to calculate its values.
+
+ .DS_Store  | Bin 6148 -> 6148 bytes
+ src/main.c | 137 ++++++++++++++++++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 118 insertions(+), 19 deletions(-)
+
+commit f603f4bdda239992b08760de99a5265d4a5b3d21
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 01:06:30 2018 +0200
+
+    Added addToBuffer to main, added an attribute to struct fractal to recognise whether a fractal has been computed yet and added a getter and a setter to interact with this value. Reading from stdin should now be working.
+
+ src/libfractal/fractal.c | 35 +++++++++++++++++++++--------------
+ src/libfractal/fractal.h | 20 +++++++++++++++++---
+ src/main.c               | 19 ++++++++++++++-----
+ 3 files changed, 52 insertions(+), 22 deletions(-)
+
+commit 4fc547429343d2ca50b353aecbde126cf971adfc
+Merge: 208f89b 2516ffb
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 00:45:59 2018 +0200
+
+    Merge branch 'master' of https://github.com/Peiffap/LSINF1252-Projet
+
+commit 208f89b36c8dc9805732c1f1ab5bf0f8254b6aab
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Apr 29 00:45:55 2018 +0200
+
+    Reading fractals from stdin - WIP.
+
+ src/main.c | 133 +++++++++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 90 insertions(+), 43 deletions(-)
+
+commit 2516ffb70aa8840048aaf481b743d59950480f43
+Author: Лилия Семерикова <liliasemerikova@MacBook-Pro-Lilia.local>
+Date:   Sat Apr 28 22:31:56 2018 +0200
+
+    Makefile
+
+ src/Makefile | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+commit 4a177c919dd5310770a9689ef52a4758438806fb
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sat Apr 28 16:33:10 2018 +0200
+
+    Implementing producer-consumer and working on efficiently making the buffer.
+
+ src/main.c | 64 +++++++++++++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 49 insertions(+), 15 deletions(-)
+
+commit 5f1dfd871b0d8580d5987a0ef7d1576d1ba580a8
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sat Apr 28 15:43:01 2018 +0200
+
+    Fixing some issues with counting the number of input files. Also worked on mutexes and semaphores.
+
+ src/main.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+commit 7b61ea5b2013e74ba68fdeaf6733024292fbb94b
+Merge: a596b44 ebb5044
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sat Apr 28 15:19:14 2018 +0200
+
+    merge
+
+commit a596b44163d8ed96ab676ebe775407f376453f48
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sat Apr 28 15:16:48 2018 +0200
+
+    make argument positioning less restrictive
+
+ .DS_Store     | Bin 6148 -> 6148 bytes
+ src/.DS_Store | Bin 6148 -> 6148 bytes
+ src/main.c    |  65 ++++++++++++++++++++++++++--------------------------------
+ 3 files changed, 29 insertions(+), 36 deletions(-)
+
+commit ebb50442c96422878ebbdb6df7e9fd7240203fc6
+Author: Лилия Семерикова <liliasemerikova@MacBook-Pro-Lilia.local>
+Date:   Tue Apr 24 11:27:40 2018 +0200
+
+    function count in text.c
+
+ Text.c     | 51 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ src/main.c | 40 ++++++++++++++++++++++++++++++++++------
+ 2 files changed, 82 insertions(+), 9 deletions(-)
+
+commit a3fa23501637f86ab1f398453309de257da4438a
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-812.sri.ucl.ac.be>
+Date:   Tue Apr 24 10:00:01 2018 +0200
+
+    complete main with threads/mutex
+
+ .DS_Store     | Bin 6148 -> 8196 bytes
+ Text.c        |  39 +--------------------------------------
+ src/.DS_Store | Bin 6148 -> 6148 bytes
+ src/main.c    |  28 ++++++++++++++++++++++++++++
+ 4 files changed, 29 insertions(+), 38 deletions(-)
+
+commit 51d678ce3fce7e96f7740652d57a934111cad799
+Merge: 66fa3b5 8a37db9
+Author: Лилия Семерикова <liliasemerikova@MacBook-Pro-Lilia.local>
+Date:   Sat Apr 21 08:26:15 2018 +0200
+
+    fonction read
+
+commit 66fa3b5dd965ed4e2464881cc9605548954ab42c
+Author: Лилия Семерикова <liliasemerikova@MacBook-Pro-Lilia.local>
+Date:   Sat Apr 21 08:05:41 2018 +0200
+
+    fonction read
+
+ Text.c | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 82 insertions(+), 8 deletions(-)
+
+commit 8a37db96e468fe6eba16671b0f897e85d67ae1fe
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 18:35:18 2018 +0200
+
+    more incrementation fixes, format lineToFract
+
+ Text.c     | 55 +++++++++++++++++++++++++++++++++----------------------
+ src/main.c |  2 +-
+ 2 files changed, 34 insertions(+), 23 deletions(-)
+
+commit a6c5401e0b91f5ac4dc0c74f15e140bc3648284d
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 12:16:15 2018 +0200
+
+    switched around incrementations to improve speed on non-optimised compilers
+
+ src/libfractal/fractal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 5a0aad3589cb3b4df7c1e2bca3fbea314f7471a9
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 12:14:41 2018 +0200
+
+    added -d, --maxthreads and - support (wip)
+
+ src/main.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 2 deletions(-)
+
+commit df756603e985af2040226298fac49583341af541
+Merge: 826722c 1a971e5
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 11:05:38 2018 +0200
+
+    Merge branch 'master' of https://github.com/Peiffap/LSINF1252-Projet
+
+commit 1a971e5c9ce34a15afa3e405c89fc7a602ff8bd7
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-10.sri.ucl.ac.be>
+Date:   Tue Apr 17 11:05:16 2018 +0200
+
+    add test files to share unfinished code
+
+ Text.c | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Text.h | 13 +++++++++++++
+ 2 files changed, 75 insertions(+)
+
+commit 826722c12d23715b11ecb11448d487414d8c309c
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 09:55:24 2018 +0200
+
+    implementing -d, wip
+
+ .DS_Store               | Bin 6148 -> 6148 bytes
+ Enonce/presentation.pdf | Bin 1145037 -> 1374663 bytes
+ src/main.c              |   7 ++++++-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+commit c0a8dd41f8499b6a3c1bf77949b1fc086cabc1af
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Tue Apr 17 08:48:29 2018 +0200
+
+    Added some fixes in fractal_new and fractal_free
+
+ src/.DS_Store            | Bin 6148 -> 6148 bytes
+ src/libfractal/fractal.c |  36 +++++++++++++++++++-----------------
+ 2 files changed, 19 insertions(+), 17 deletions(-)
+
+commit 9cdf44677f2844deb9dbf8ef3da9c328854e1822
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri Apr 13 11:01:13 2018 +0200
+
+    add getter/setter
+
+ src/libfractal/fractal.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+commit ad6d4645c6fd6e5fafe96fe35df2e147a779b828
+Merge: 5060b54 3c56c03
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-53.sri.ucl.ac.be>
+Date:   Fri Apr 13 10:57:40 2018 +0200
+
+    merge
+
+commit 5060b54cc005f8f955ec15750041083f4830ed62
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-53.sri.ucl.ac.be>
+Date:   Fri Apr 13 10:53:13 2018 +0200
+
+    changement des get
+
+ src/libfractal/fractal.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+commit 3c56c036841182f17cd1a364cc7615858c938332
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri Apr 13 10:52:43 2018 +0200
+
+    added getters/setters
+
+ src/libfractal/fractal.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+commit e08a4a0fe691c40f877a4daba91a0c51f3d37638
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri Apr 13 10:47:30 2018 +0200
+
+    remove asldhalskdjhad;ka
+
+ src/libfractal/fractal.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit bfca8c28cc0795c262d175e43f7220e6ee62092c
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-53.sri.ucl.ac.be>
+Date:   Fri Apr 13 10:42:38 2018 +0200
+
+    changement
+
+ src/libfractal/fractal.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 801b3adf6dc00e475b77da9732adffe14282799e
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri Apr 13 10:40:08 2018 +0200
+
+    remove coucou
+
+ .DS_Store                | Bin 6148 -> 6148 bytes
+ src/.DS_Store            | Bin 6148 -> 6148 bytes
+ src/libfractal/fractal.c |   2 --
+ 3 files changed, 2 deletions(-)
+
+commit 5096fe614a369a0f82be5268b43fe8430a7507da
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-53.sri.ucl.ac.be>
+Date:   Fri Apr 13 10:33:47 2018 +0200
+
+    coucou
+
+ .DS_Store                | Bin 0 -> 6148 bytes
+ src/.DS_Store            | Bin 0 -> 6148 bytes
+ src/libfractal/fractal.c |   2 ++
+ 3 files changed, 2 insertions(+)
+
+commit 6f1e5604f28b8806f8b710e63c68fa94ea0b112c
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri Apr 13 10:25:55 2018 +0200
+
+    added code template
+
+ src/Makefile             |   1 +
+ src/libfractal/Makefile  |  15 ++++++
+ src/libfractal/fractal.c |  89 +++++++++++++++++++++++++++++++++++
+ src/libfractal/fractal.h | 120 +++++++++++++++++++++++++++++++++++++++++++++++
+ src/libfractal/tools.c   | 103 ++++++++++++++++++++++++++++++++++++++++
+ src/main.c               |  11 +++++
+ 6 files changed, 339 insertions(+)
+
+commit 6b1c37a260768bbab324adde2050f13a848efcb0
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Mar 25 23:11:27 2018 +0200
+
+    Removed unnecessary compilation files
+
+ Rapports/Architecture S8/architecture.aux        |   40 +
+ Rapports/Architecture S8/architecture.bcf        | 2124 +++++++++++++++
+ Rapports/Architecture S8/architecture.log        | 2990 ++++++++++++++++++++++
+ Rapports/Architecture S8/architecture.out        |    4 +
+ Rapports/Architecture S8/architecture.pdf        |  Bin 44034 -> 43787 bytes
+ Rapports/Architecture S8/architecture.run.xml    |   86 +
+ Rapports/Architecture S8/architecture.synctex.gz |  Bin 0 -> 3568 bytes
+ 7 files changed, 5244 insertions(+)
+
+commit 78e6541901397d6cffe10336823d73b2edb2ec9e
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Mar 25 23:04:33 2018 +0200
+
+    Removed unnecessary compilation files
+
+ Rapports/Architecture S8/architecture.aux         |   40 -
+ Rapports/Architecture S8/architecture.bbl         |   20 -
+ Rapports/Architecture S8/architecture.bcf         | 2124 ----------------
+ Rapports/Architecture S8/architecture.blg         |    9 -
+ Rapports/Architecture S8/architecture.fdb_latexmk |  252 --
+ Rapports/Architecture S8/architecture.fls         |  429 ----
+ Rapports/Architecture S8/architecture.log         | 2749 ---------------------
+ Rapports/Architecture S8/architecture.out         |    4 -
+ Rapports/Architecture S8/architecture.run.xml     |   86 -
+ Rapports/Architecture S8/architecture.synctex.gz  |  Bin 3596 -> 0 bytes
+ 10 files changed, 5713 deletions(-)
+
+commit ad0ccfd09ab2b326bb28bf244634a421375e7355
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Sun Mar 25 22:58:25 2018 +0200
+
+    Added Report S8
+
+ Rapports/Architecture S8/architecture.aux         |   40 +
+ Rapports/Architecture S8/architecture.bbl         |   20 +
+ Rapports/Architecture S8/architecture.bcf         | 2124 ++++++++++++++++
+ Rapports/Architecture S8/architecture.blg         |    9 +
+ Rapports/Architecture S8/architecture.fdb_latexmk |  252 ++
+ Rapports/Architecture S8/architecture.fls         |  429 ++++
+ Rapports/Architecture S8/architecture.log         | 2749 +++++++++++++++++++++
+ Rapports/Architecture S8/architecture.out         |    4 +
+ Rapports/Architecture S8/architecture.pdf         |  Bin 0 -> 44034 bytes
+ Rapports/Architecture S8/architecture.run.xml     |   86 +
+ Rapports/Architecture S8/architecture.synctex.gz  |  Bin 0 -> 3596 bytes
+ Rapports/Architecture S8/architecture.tex         |   21 +
+ Rapports/preamble.sty                             |   83 +
+ 13 files changed, 5817 insertions(+)
+
+commit df9717d8c4668ca76447547cfc540068556708e7
+Author: Gilles Peiffer <gilles.peiffer@outlook.com>
+Date:   Thu Mar 22 19:34:46 2018 +0100
+
+    Create LICENSE.md
+
+ LICENSE.md | 661 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 661 insertions(+)
+
+commit 80ca4cd38eef956d7b02fefecedc75a108852bb6
+Author: Gilles Peiffer <gilles.peiffer@outlook.com>
+Date:   Thu Mar 22 19:34:24 2018 +0100
+
+    Create README.md
+
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit da78be62cb3292565359a9e9c42654bc0491a49d
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Thu Mar 22 19:32:21 2018 +0100
+
+    First commit
+
+ Enonce/enonce.pdf       | Bin 0 -> 245527 bytes
+ Enonce/presentation.pdf | Bin 0 -> 1145037 bytes
+ 2 files changed, 0 insertions(+), 0 deletions(-)

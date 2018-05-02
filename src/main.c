@@ -265,7 +265,7 @@ int main(int argc, const char *argv[])
     }
 
     BUFFER_SIZE = fmax(maxThreads, nInputFiles) + 1;
-    buffer = (struct fractal **) malloc(BUFFER_SIZE * sizeof(struct fractal*));
+    buffer = (struct fractal **) malloc(BUFFER_SIZE * sizeof struct fractal *);
 
     char** inputFiles;
     inputFiles = malloc(nInputFiles * sizeof(char*));
