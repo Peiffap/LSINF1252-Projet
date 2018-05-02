@@ -5,20 +5,20 @@
 
 struct fractal *fractal_new(const char *name, int width, int height, double a, double b)
 {
-    struct fractal *newFractal = (struct fractal *) malloc(sizeof(struct fractal));
+    struct fractal *newFractal = malloc(sizeof(struct fractal));
     if (newFractal == NULL)
     {
         return NULL;
     }
-    
-    char *n = (char *) malloc((strlen(n) + 1) * sizeof(char)); // Allocate space for string and null terminator,
+
+    char *n = malloc((strlen(name) + 1) * sizeof(char)); // Allocate space for string and null terminator.
     strcpy(n, name); // Copy the argument string into the newly allocated memory space.
     newFractal->theName = n;
     newFractal->theWidth = width;
     newFractal->theHeight = height;
     newFractal->theA = a;
     newFractal->theB = b;
-    
+
     int **data; // Local array.
     data = malloc(width * sizeof(int *)); // Pointer vector.
     if (data == NULL)
@@ -37,21 +37,21 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
     newFractal->values = data; // Point to local array.
     newFractal->computed = 0; // When initialising the fractal, it's safe to say it hasn't been computed yet.
     newFractal->average = 0.0; // Default value, the average hasn't been computed yet when the fractal is created.
-    
+
     return newFractal;
 }
 
 void fractal_free(struct fractal *f)
 {
     free(f->theName); // Free name field.
-    
+
     int i;
     for (i = 0; i < f->theWidth; ++i)
     {
         free(f->values[i]); // For every allocated pointer in the pointer vector, free that pointer.
     }
     free(f->values); // Free values array.
-    
+
     free((void *) f); // Free struct.
 }
 
