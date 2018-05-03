@@ -1,36 +1,30 @@
-# TODO
+all: main
+	make clean
 
+main: main.o fractstack/fractstacktack.o prodcons/prodcons.o
+	cd libfractal && make
+	gcc -Wall -g -o main main.o fractstack/fractstack.o libfractal/libfractal.a prodcons/prodcons.o -lSDL -lpthread
 
-.PHONY: clean, mrproper
-  
-# définition des variables
-CC = gcc
-CFLAGS = -Wall -lpthread
-EXEC=main
- 
- 
+main.o: main.c
+	gcc -Wall -g -c main.c -lpthread
 
-all: $(EXEC)
+fractstack.o: fractstack/fractstack.c
+	gcc -Wall -g -c fractstack/fractstack.c -lpthread
 
-main : main.o libfractal/fractal.o
-	$(CC) main.o libfractal/fractal.o -o 
+prodcons.o: prodcons/prodcons.c
+	gcc -Wall -g -c prodcons/prodcons.c -lpthread
 
-lib : libfractal/fractal.o
-	$(CC) main.o libfractal/fractal.o -o 
+#test:
+#	cd libfractal && make
+#	cd Test && make
+#	make clean
 
-tests: #TO DO
- 
-main.o: main.c fonctions.h
-	$(CC) -c main.c -o main.o $(CFLAGS)
- 
-libfractal/fractal.o: libfractal/fractal.c
-	$(CC) -c libfractal/fractal.c -o libfractal/fractal.o $(CFLAGS)
- 
- 
-# clean
+lib:
+	cd libfractal && make
+	make clean
+
+# Still need to add Test/*.o between fractstack/*.o and prodcons/*.o
 clean:
-	rm -rf *.o
- 
-# mrproper
-mrproper: clean
-	rm -rf $(EXEC)
+	rm -rf *.o libfractal/*.o libfractal/*.a fractstack/*.o prodcons/*.o
+
+.SILENT:
