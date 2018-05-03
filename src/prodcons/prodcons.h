@@ -4,9 +4,9 @@
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
  *
- * @param fileName a string containing the name of the file where the fractal is stored.
+ * @param file_name a string containing the name of the file where the fractal is stored.
  */
-void *read_file_input(const char *fileName);
+void *read_file_input(const char *file_name);
 
 /**
  * This function takes a string describing a fractal as input and returns the fractal described by that line.
