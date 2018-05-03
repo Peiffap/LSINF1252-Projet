@@ -9,27 +9,27 @@
 #include "prodcons.h"
 #include "../fractstack/fractstack.h"
 
-pthread_mutex_t bestMutex; // Mutex to control access to the best fractal value.
-struct fractal *bestFractal; // Fractal with highest average number of iterations.
+pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
+struct fractal *best_fractal; // Fractal with highest average number of iterations.
 double highest_avg = 0.0; // Keeps track of the highest average value among all fractals.
-int dPosition;
+int d_position;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
  *
- * @param fileName a string containing the name of the file where the fractal is stored.
+ * @param file_name a string containing the name of the file where the fractal is stored.
  */
-void *read_file_input(const char *fileName)
+void *read_file_input(const char *file_name)
 {
     FILE *file = NULL;
-    char *fractalLine = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
+    char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 
-	if (fractalLine == NULL)
+	if (fractal_line == NULL)
 	{
 		printf("Error with malloc in read_file_input. \n");
 	}
 
-    file = fopen(fileName, "r"); // Opens the file specified by fileName with read permission.
+    file = fopen(file_name, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
         printf("Error with fopen during file opening. \n");
@@ -37,22 +37,18 @@ void *read_file_input(const char *fileName)
     else
     {
         // As long as the file has more lines with fractals, the function should keep reading them.
-        while (fgets(fractalLine, LINE_LENGTH, file) != NULL)
+        while (fgets(fractal_line, LINE_LENGTH, file) != NULL)
         {
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
-            if (*fractalLine != '\n' && *fractalLine != '#' && *fractalLine!= ' ')
+            if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                sem_wait(&empty);
-                pthread_mutex_lock(&bufferMutex);
-                add_to_stack(line_to_fractal(fractalLine)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
-                pthread_mutex_unlock(&bufferMutex);
-                sem_post(&full);
+                add_to_stack(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
             }
         }
         fclose(file); // Closes the file after reading it.
     }
-	free(fractalLine);
-	free(fileName);
+	free(fractal_line);
+	free(file_name);
     pthread_exit(NULL);
 }
 
