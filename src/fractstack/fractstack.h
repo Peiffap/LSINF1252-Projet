@@ -17,4 +17,14 @@ int push(struct fractal *f);
  */
 struct fractal *pop();
 
+/**
+ * Initialises the stack and the killer nodes.
+ *
+ * @param size is the size of the stack.
+ * @param max_thread is the maximum number of computing threads.
+ *
+ * @return 0 if initialisation succesful, -1 if not.
+ */
+int init(int size, int max_thread);
+
 #endif

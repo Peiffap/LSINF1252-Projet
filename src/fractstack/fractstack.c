@@ -68,3 +68,36 @@ struct fractal *pop()
 	free(save);
 	return f;
 }
+
+
+/**
+ * Initialises the stack and the killer nodes.
+ *
+ * @param size is the size of the stack.
+ * @param max_thread is the maximum number of computing threads.
+ *
+ * @return 0 if initialisation succesful, -1 if not.
+ */
+int init(int size, int max_thread)
+{
+	pthread_mutex_init(&stack_mutex, NULL);
+	sem_init(&empty, 0, size);
+	sem_init(&full, 0, 0);
+
+	int i;
+	for (i = 0; i < max_thread; ++i)
+	{
+		node *new_node = malloc(sizeof node);
+		if (new_node == NULL){
+			printf("Error with malloc in init. \n");
+			return -1;
+		}
+		new_node->f = NULL;
+		pthread_mutex_lock(&stack_mutex);
+		new_node->next = head;
+		head = new_node;
+		pthread_mutex_unlock(&stack_mutex);
+	}
+
+	return 0;
+}
