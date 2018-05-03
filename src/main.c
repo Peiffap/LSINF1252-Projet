@@ -18,104 +18,12 @@ int dPosition = 0;// Determines whether all .bmp files need to be generated.
 int maxThreadsPosition = 0;// Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
 int hyphenPosition = 0;// Determines whether the user is gonna enter fractals from the command line.
 
-struct fractal **stack;// stack to store fractals.
+struct fractal **stack;// Stack to store fractals.
 
 int nAddedFractals = 0;// Number of fractals that have been added to the stack.
 int nComputedFractals = 0;// Number of fractals whose values have been computed.
 
 int STACK_SIZE;
-
-/**
- * Picks a fractal from the stack so that consumer threads can compute it.
- *
- * @return the fractal to be computed by the consumer function.
- */
-
-struct fractal *pick_from_stack()
-{
-    struct fractal *runner = *stack; // Iterator to run through the stack.
-    struct fractal *fract = malloc(sizeof(struct fractal)); // Returned fractal.
-
-    int i;
-    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the stack is ready to receive an extra fractal, i should never reach STACK_SIZE.
-    for (i = 0; fractal_get_computed(runner) != 0 && i < STACK_SIZE; ++i)
-    {
-        ++runner;
-    }
-    // Once the loop's exit condition gets reached, the runner fractal points to a non-computed fractal, which we can then compute.
-    *fract = *runner;
-    fractal_set_computed(runner, 1);// The chosen fractal is now (about to be) computed, so it can be considered as computed.
-    return fract;
-}
-
-/**
- * Adds a fractal to the stack so that consumer threads can access it.
- *
- * @param fract the fractal to be added to the stack.
- */
-void add_to_stack(struct fractal *fract)
-{
-    struct fractal *runner = *stack; // Iterator to run through the stack.
-
-    int i;
-    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the stack is ready to receive an extra fractal, i should never reach STACK_SIZE.
-    for (i = 0; fractal_get_computed(runner) == 0 && i < STACK_SIZE; ++i)
-    {
-        ++runner;
-    }
-    // Once the loop's exit condition gets reached, the runner fractal points to a previously computed fractal, which we can overwrite.
-    runner = fract;
-    ++nAddedFractals; // An extra fractal has been added.
-}
-
-/**
- * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
- */
-void *compute_fractal()
-{
-    struct fractal *fract = malloc(sizeof(struct fractal));
-
-    sem_wait(&full);
-    pthread_mutex_lock(&stack_mutex);
-    fract = pick_from_stack(); // Picks a non-computed fractal from the stack.
-    pthread_mutex_unlock(&stack_mutex);
-    sem_post(&empty);
-
-    int height = fractal_get_height(fract);
-    int width = fractal_get_width(fract);
-    double totalIterations = 0.0;
-
-    int i, j;
-    for (i = 0; i < width; ++i)
-    {
-        for (j = 0; j < height; ++j)
-        {
-            fractal_compute_value(fract, i, j); // Computes the number of iterations for a given pixel of the fractal and stores this value in the values array of the fractal.
-            totalIterations += fractal_get_value(fract, i, j); // Sums up the total iterations using the number of iterations set in the previous line.
-        }
-    }
-
-    double avg = (double) avg / (double) (width * height); // Computes the average number of iterations for a given fractal.
-    fractal_set_average(fract, avg); // Stores this average value in the fractal's average attribute.
-
-    // If dPosition isn't equal to zero then it means the [-d] was present and that all a .bmp file should be generated for every fractal.
-    if (dPosition != 0)
-    {
-        write_bitmap_sdl(fract, fractal_get_name(fract));
-    }
-
-    pthread_mutex_lock(&bestMutex);
-    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
-    if (avg > fractal_get_average(bestFractal))
-    {
-        *bestFractal = *fract;
-    }
-    ++nComputedFractals; // An extra fractal has been computed.
-    pthread_mutex_unlock(&bestMutex);
-
-    free(fract);
-    return NULL;
-}
 
 /**
  * Producer function that reads input from the console, line per line.

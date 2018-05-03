@@ -11,7 +11,6 @@
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
 struct fractal *best_fractal; // Fractal with highest average number of iterations.
-double highest_avg = 0.0; // Keeps track of the highest average value among all fractals.
 int d_position;
 
 /**
@@ -81,4 +80,50 @@ struct fractal *line_to_fractal(const char *line)
     struct fractal *f = fractal_new(name, w, h, a, b);
     free(name);
     return f;
+}
+
+/**
+ * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
+ */
+void *compute_fractal()
+{
+    struct fractal *fract = malloc(sizeof(struct fractal));
+
+    fract = pop();
+
+    int height = fractal_get_height(fract);
+    int width = fractal_get_width(fract);
+    double totalIterations = 0.0;
+
+    int i, j;
+    for (i = 0; i < width; ++i)
+    {
+        for (j = 0; j < height; ++j)
+        {
+            fractal_compute_value(fract, i, j); // Computes the number of iterations for a given pixel of the fractal and stores this value in the values array of the fractal.
+            totalIterations += fractal_get_value(fract, i, j); // Sums up the total iterations using the number of iterations set in the previous line.
+        }
+    }
+
+    double avg = (double) avg / (double) (width * height); // Computes the average number of iterations for a given fractal.
+    fractal_set_average(fract, avg); // Stores this average value in the fractal's average attribute.
+
+    // If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
+    if (d_position != 0)
+    {
+        write_bitmap_sdl(fract, fractal_get_name(fract));
+    }
+
+    pthread_mutex_lock(&best_mutex);
+    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
+    if (avg > fractal_get_average(best_fractal))
+    {
+		printf("A fractal with a higher average (%f) has been found. \n", avg);
+		free(best_fractal);
+        best_fractal = fract;
+    }
+    pthread_mutex_unlock(&best_mutex);
+
+    fractal_free(fract);
+    return NULL;
 }
