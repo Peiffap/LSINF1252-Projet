@@ -73,12 +73,12 @@ void add_to_stack(struct fractal *fract)
  */
 void *compute_fractal()
 {
-    struct fractal *fract = (struct fractal*)malloc(sizeof(struct fractal));
+    struct fractal *fract = malloc(sizeof(struct fractal));
 
     sem_wait(&full);
-    pthread_mutex_lock(&stackMutex);
+    pthread_mutex_lock(&stack_mutex);
     fract = pick_from_stack(); // Picks a non-computed fractal from the stack.
-    pthread_mutex_unlock(&stackMutex);
+    pthread_mutex_unlock(&stack_mutex);
     sem_post(&empty);
 
     int height = fractal_get_height(fract);
@@ -138,9 +138,9 @@ void * read_console_input()
 
         // Make sure that the different producer threads aren't overwriting each other and thus missing fractals.
         sem_wait(&empty);
-        pthread_mutex_lock(&stackMutex);
+        pthread_mutex_lock(&stack_mutex);
         add_to_stack(fract); // Adds the newly read fractal to the stack.
-        pthread_mutex_unlock(&stackMutex);
+        pthread_mutex_unlock(&stack_mutex);
         sem_post(&full);
 
         // Asks the user if they want to keep entering fractals.
@@ -218,7 +218,7 @@ int main(int argc, const char *argv[])
 
 
     // Initialising mutexes and semaphores.
-    pthread_mutex_init(&stackMutex, NULL);
+    pthread_mutex_init(&stack_mutex, NULL);
     sem_init(&empty, 0, STACK_SIZE);
     sem_init(&full, 0, 0);
 
