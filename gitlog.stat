@@ -1,3 +1,116 @@
+commit 96729e2db473e49da32a0efed1ee9738d564e639
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 23:43:32 2018 +0200
+
+    Several fixes to files.
+
+ src/Makefile                |  2 +-
+ src/fractstack/fractstack.c |  5 ++---
+ src/fractstack/fractstack.h |  4 ++--
+ src/main.c                  | 11 +++++------
+ src/prodcons/prodcons.c     | 12 +++++++-----
+ src/prodcons/prodcons.h     |  4 ++--
+ 6 files changed, 19 insertions(+), 19 deletions(-)
+
+commit e916398d986c86340fa863fc3a6bf66391b983da
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 23:19:20 2018 +0200
+
+    Update Makefile.
+
+ src/Makefile | 64 +++++++++++++++++++++++++++---------------------------------
+ 1 file changed, 29 insertions(+), 35 deletions(-)
+
+commit a439bfb592ffe2f2ce50eb9734f750292eb65ce1
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 23:13:10 2018 +0200
+
+    Add main.h, move read_console_input, allow hyphenPosition to be extern.
+
+ src/fractstack/fractstack.c |  1 +
+ src/main.c                  | 45 +++++++++++----------------------------------
+ src/main.h                  | 10 ++++++++++
+ src/prodcons/prodcons.c     | 29 +++++++++++++++++++++++++++++
+ src/prodcons/prodcons.h     |  5 +++++
+ 5 files changed, 56 insertions(+), 34 deletions(-)
+
+commit ad79b3013ef5a871614473748b07d093bcc97639
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 23:00:31 2018 +0200
+
+    Creating and joining threads is now supported.
+
+ src/main.c | 195 ++++++++++++++++++++++++++++++++++---------------------------
+ 1 file changed, 108 insertions(+), 87 deletions(-)
+
+commit b37e76e6f3ed9d110b4b08fc4d7028bc6acd5eed
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 22:15:55 2018 +0200
+
+    Added compute_fractal to prodcons/. Removed some now useless functions from main.c.
+
+ src/main.c              | 94 +------------------------------------------------
+ src/prodcons/prodcons.c | 47 ++++++++++++++++++++++++-
+ src/prodcons/prodcons.h |  9 +++++
+ 3 files changed, 56 insertions(+), 94 deletions(-)
+
+commit 4302553878296abd3c242d98b8cd2cf1a09d21f2
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:53:34 2018 +0200
+
+    Add node struct to fractstack.h.
+
+ src/fractstack/fractstack.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit cdbe87712014d2add248dffb82f0ac3c98e520a8
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:51:31 2018 +0200
+
+    Add kill and destroy to fractstack.
+
+ src/fractstack/fractstack.c | 25 +++++++++++++++++++++++++
+ src/fractstack/fractstack.h | 12 ++++++++++++
+ 2 files changed, 37 insertions(+)
+
+commit 69432f4acba3786c81674741aea84ac2a44ea744
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:47:00 2018 +0200
+
+    Add init to fractstack.
+
+ src/fractstack/fractstack.c | 33 +++++++++++++++++++++++++++++++++
+ src/fractstack/fractstack.h | 10 ++++++++++
+ 2 files changed, 43 insertions(+)
+
+commit 9a6752db27b48b9cff960474aff08100f8b374a0
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:41:10 2018 +0200
+
+    Fixes in prodcons.h related to variable names.
+
+ src/prodcons/prodcons.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 3a0ee022a7935f4c7f9cfd2fc6c059ae0ee93536
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:40:34 2018 +0200
+
+    Add pop.
+
+ src/fractstack/fractstack.c | 29 +++++++++++++++++++++++++++--
+ src/fractstack/fractstack.h | 14 ++++++++++++++
+ 2 files changed, 41 insertions(+), 2 deletions(-)
+
+commit 299597611483c38a9410d684df44c50a5e5f2358
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:39:52 2018 +0200
+
+    Updated gitlog.stat.
+
+ gitlog.stat | 81 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+
 commit f2aa79f641b23e77f31511fc317f9f8132b84c6e
 Author: gp <gilles.peiffer@hotmail.com>
 Date:   Thu May 3 21:31:11 2018 +0200
