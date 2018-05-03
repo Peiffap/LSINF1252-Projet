@@ -27,4 +27,16 @@ struct fractal *pop();
  */
 int init(int size, int max_thread);
 
+/**
+ * Kills the consumer threads.
+ *
+ * @params max_thread the number of consumer threads.
+ */
+void kill(int max_thread);
+
+/**
+ * Destroy mutexes and semaphores.
+ */
+void destroy();
+
 #endif

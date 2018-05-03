@@ -101,3 +101,28 @@ int init(int size, int max_thread)
 
 	return 0;
 }
+
+/**
+ * Kills the consumer threads.
+ *
+ * @params max_thread the number of consumer threads.
+ */
+void kill(int max_thread)
+{
+	printf("Killing consumer threads. \n");
+
+	int i;
+	for(i = 0; i < max_thread; ++i){
+		sem_post(&full);
+	}
+}
+
+/**
+ * Destroy mutexes and semaphores.
+ */
+void destroy()
+{
+	pthread_mutex_destroy(&stack_mutex);
+	sem_destroy(&empty);
+	sem_destroy(&full);
+}
