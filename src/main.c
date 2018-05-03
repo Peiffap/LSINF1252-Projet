@@ -1,6 +1,3 @@
-#define _GNU_SOURCE
-#define LINE_LENGTH 256
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +9,7 @@
 #include "libfractal/fractal.h"
 #include "fractstack/fractstack.h"
 #include "prodcons/prodcons.h"
+#include "main.h"
 
 
 int d_position = 0; // Determines whether all .bmp files need to be generated.
@@ -19,35 +17,6 @@ int max_threads_position = 0; // Determines whether the user has set a maximum n
 int hyphen_position = 0; // Determines whether the user is gonna enter fractals from the command line.
 
 int STACK_SIZE;
-
-/**
- * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
- */
-void *read_console_input()
-{
-    char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-    char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
-
-    bool has_next = true; // Determines whether the user is gonna enter another fractal.
-
-    // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
-    while (has_next)
-    {
-        // Ask user to enter a fractal and store the result in fractal_line.
-        printf("Please enter a fractal under the following format : name height width a b. \n");
-        fgets(fractal_line, LINE_LENGTH, stdin);
-
-        push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
-
-        // Asks the user if they want to keep entering fractals.
-        printf("Would you like to enter another fractal (y/n)? \n");
-        has_next = strcasecmp(fgets(y, 2, stdin), "y");
-    }
-
-    return NULL;
-}
-
-
 
 int main(int argc, const char *argv[])
 {
@@ -192,7 +161,15 @@ int main(int argc, const char *argv[])
 		}
     }
 
+	// If the [-d] option wasn't selected, the only the best fractal needs to be converted into a bmp file.
+	if (d_position == 0)
+	{
+		printf("The fractal with the highest average number of iterations was %s \n", fractal_get_name(best_fractal));
+		write_bitmap_sdl(best_fractal, fractal_get_name(best_fractal));
+	}
 
-
-    return 0;
+	destroy();
+	pthread_mutex_destroy(&best_mutex);
+	fractal_free(best_fractal);
+	return EXIT_SUCCESS;
 }

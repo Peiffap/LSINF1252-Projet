@@ -8,10 +8,12 @@
 #include "../libfractal/fractal.h"
 #include "prodcons.h"
 #include "../fractstack/fractstack.h"
+#include "main.h"
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
 struct fractal *best_fractal; // Fractal with highest average number of iterations.
 int d_position;
+int hyphen_position;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
@@ -125,5 +127,32 @@ void *compute_fractal()
     pthread_mutex_unlock(&best_mutex);
 
     fractal_free(fract);
+    return NULL;
+}
+
+/**
+ * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
+ */
+void *read_console_input()
+{
+    char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
+    char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
+
+    bool has_next = true; // Determines whether the user is gonna enter another fractal.
+
+    // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
+    while (has_next)
+    {
+        // Ask user to enter a fractal and store the result in fractal_line.
+        printf("Please enter a fractal under the following format : name height width a b. \n");
+        fgets(fractal_line, LINE_LENGTH, stdin);
+
+        push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
+
+        // Asks the user if they want to keep entering fractals.
+        printf("Would you like to enter another fractal (y/n)? \n");
+        has_next = strcasecmp(fgets(y, 2, stdin), "y");
+    }
+
     return NULL;
 }

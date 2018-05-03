@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include "../libfractal/fractal.h"
 #include "fractstack.h"
+#include "main.h"
 
 static pthread_mutex_t stack_mutex;
 static sem_t empty;

@@ -26,4 +26,9 @@ struct fractal *line_to_fractal(const char *line);
  */
 void *compute_fractal();
 
+/**
+ * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
+ */
+void *read_console_input();
+
 #endif
