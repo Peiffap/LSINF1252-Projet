@@ -27,7 +27,8 @@ int push(struct fractal *f)
 		return -1;
 	}
 
-	if (f == NULL){
+	if (f == NULL)
+	{
 		printf("Error, NULL fractal in push. \n");
 		return -1;
 	}
@@ -40,6 +41,30 @@ int push(struct fractal *f)
 	head = new_node;
 	pthread_mutex_unlock(&stack_mutex);
 	sem_post(&full);
-	
+
 	return 0;
+}
+
+/**
+ * Removes and returns a fractal from the stack. If the fractal is NULL, the thread is killed.
+ *
+ * @return the most recently added fractal on the stack.
+ */
+struct fractal *pop()
+{
+	sem_wait(&full);
+	pthread_mutex_lock(&stack_mutex);
+	struct fractal *f = head->f;
+	node *save = head;
+	head = head->next;
+	pthread_mutex_unlock(&stack_mutex);
+	sem_post(&empty);
+
+	if(f == NULL)
+	{
+		printf("Fractal was NULL in pop; thread will get killed. \n");
+		pthread_exit(NULL);
+	}
+	free(save);
+	return f;
 }
