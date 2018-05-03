@@ -1,6 +1,5 @@
 #define DEFAULT_NUMBER_OF_THREADS 7
 #define _GNU_SOURCE
-#define LINE_LENGTH 130
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,37 +10,35 @@
 #include <semaphore.h>
 #include "libfractal/fractal.h"
 
-pthread_mutex_t bufferMutex;// Mutex to control buffer access.
-pthread_mutex_t bestMutex;// Mutex to control access to the best fractal value.
-sem_t empty;// Determines whether the consumer threads can do calculations on a fractal from the buffer.
-sem_t full;// Determines whether the producer threads can add another thread to the buffer.
+pthread_mutex_t stack_mutex;// Mutex to control stack access.
+sem_t empty;// Determines whether the consumer threads can do calculations on a fractal from the stack.
+sem_t full;// Determines whether the producer threads can add another thread to the stack.
 
 int dPosition = 0;// Determines whether all .bmp files need to be generated.
 int maxThreadsPosition = 0;// Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
 int hyphenPosition = 0;// Determines whether the user is gonna enter fractals from the command line.
 
-struct fractal **buffer;// Buffer to store fractals.
-struct fractal *bestFractal;// Fractal with highest average number of iterations.
+struct fractal **stack;// stack to store fractals.
 
-int nAddedFractals = 0;// Number of fractals that have been added to the buffer.
+int nAddedFractals = 0;// Number of fractals that have been added to the stack.
 int nComputedFractals = 0;// Number of fractals whose values have been computed.
 
-int BUFFER_SIZE;
+int STACK_SIZE;
 
 /**
- * Picks a fractal from the buffer so that consumer threads can compute it.
+ * Picks a fractal from the stack so that consumer threads can compute it.
  *
  * @return the fractal to be computed by the consumer function.
  */
 
-struct fractal *pickFromBuffer()
+struct fractal *pick_from_stack()
 {
-    struct fractal *runner = *buffer; // Iterator to run through the buffer.
-    struct fractal *fract = (struct fractal*)malloc(sizeof(struct fractal)); // Returned fractal.
+    struct fractal *runner = *stack; // Iterator to run through the stack.
+    struct fractal *fract = malloc(sizeof(struct fractal)); // Returned fractal.
 
     int i;
-    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the buffer is ready to receive an extra fractal, i should never reach BUFFER_SIZE.
-    for (i = 0; fractal_get_computed(runner) != 0 && i < BUFFER_SIZE; ++i)
+    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the stack is ready to receive an extra fractal, i should never reach STACK_SIZE.
+    for (i = 0; fractal_get_computed(runner) != 0 && i < STACK_SIZE; ++i)
     {
         ++runner;
     }
@@ -52,17 +49,17 @@ struct fractal *pickFromBuffer()
 }
 
 /**
- * Adds a fractal to the buffer so that consumer threads can access it.
+ * Adds a fractal to the stack so that consumer threads can access it.
  *
- * @param fract the fractal to be added to the buffer.
+ * @param fract the fractal to be added to the stack.
  */
-void addToBuffer(struct fractal *fract)
+void add_to_stack(struct fractal *fract)
 {
-    struct fractal *runner = *buffer; // Iterator to run through the buffer.
+    struct fractal *runner = *stack; // Iterator to run through the stack.
 
     int i;
-    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the buffer is ready to receive an extra fractal, i should never reach BUFFER_SIZE.
-    for (i = 0; fractal_get_computed(runner) == 0 && i < BUFFER_SIZE; ++i)
+    // As long as the fractal being currently iterated hasn't been computed, the iterator keeps going. Since this function should only get called when the stack is ready to receive an extra fractal, i should never reach STACK_SIZE.
+    for (i = 0; fractal_get_computed(runner) == 0 && i < STACK_SIZE; ++i)
     {
         ++runner;
     }
@@ -71,46 +68,17 @@ void addToBuffer(struct fractal *fract)
     ++nAddedFractals; // An extra fractal has been added.
 }
 
-
 /**
- * This function takes a string describing a fractal as input and returns the fractal described by that line.
- *
- * @param line is a string describing a fractal. The order in which the fractal's attributes should be is name-height-width-a-b, where the hyphens should be replaced by regular spaces.
- *
- * @return NULL if the function encounters an error, otherwise a pointer to a fractal struct with the correct attributes.
+ * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
  */
-struct fractal *lineToFractal(char *line)
-{
-    int h, w; // Height and width of the fractal.
-    double a, b; // Real and imaginary part of the fractal's constant parameter.
-    char *name = malloc(sizeof(char) * 65); // The longest the name field can be is sixty-four characters, without taking into account the null terminator.
-
-    if (name == NULL)
-    {
-        printf("Error during name allocation in lineToFractal. \n");
-    }
-    int err = sscanf(line, "%s %d %d %lf %lf", name, &w, &h, &a, &b);
-    // If the sscanf call is succesful, it should return five, since it should assign five values. If the number of assigned values isn't equal to five, a problem occured.
-    if (err != 5)
-    {
-        return NULL;
-    }
-    struct fractal *f = fractal_new(name, w, h, a, b);
-    free(name);
-    return f;
-}
-
-/**
- * Computes the values of every pixel for a fractal taken from the buffer, stores them in an array and stores the average value in one of the fractal's attributes.
- */
-void *computeFractal()
+void *compute_fractal()
 {
     struct fractal *fract = (struct fractal*)malloc(sizeof(struct fractal));
 
     sem_wait(&full);
-    pthread_mutex_lock(&bufferMutex);
-    fract = pickFromBuffer(); // Picks a non-computed fractal from the buffer.
-    pthread_mutex_unlock(&bufferMutex);
+    pthread_mutex_lock(&stackMutex);
+    fract = pick_from_stack(); // Picks a non-computed fractal from the stack.
+    pthread_mutex_unlock(&stackMutex);
     sem_post(&empty);
 
     int height = fractal_get_height(fract);
@@ -150,46 +118,9 @@ void *computeFractal()
 }
 
 /**
- * Producer function that reads input from a file, line per line.
- *
- * @param fileName a string containing the name of the file where the fractal is stored.
- */
-void *readFileInput(void *fileName)
-{
-    FILE *file = NULL;
-    char fractalLine[LINE_LENGTH]; // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-    char *beginLine = NULL; // Points to the beginning of the line to determine whether the line is to be ignored (if it starts with a newline character or an octothorpe).
-
-    file = fopen((char *) fileName, "r"); // Opens the file specified by fileName with read permission.
-    if (file == NULL)
-    {
-        printf("An error occured during file initialisation. \n");
-    }
-    else
-    {
-        // As long as the file has more lines with fractals, the function should keep reading them.
-        while (fgets(fractalLine, LINE_LENGTH, file) != NULL)
-        {
-            // If the line doesn't start with a newline character or an octothorpe, it describes a fractal and should be read accordingly.
-            if (fractalLine[0] != '\n' && fractalLine[0] != '#')
-            {
-                struct fractal *fract = lineToFractal(fractalLine); // Convert the line to a pointer to a fractal struct.
-                sem_wait(&empty);
-                pthread_mutex_lock(&bufferMutex);
-                addToBuffer(fract); // Add the fractal to the buffer.
-                pthread_mutex_unlock(&bufferMutex);
-                sem_post(&full);
-            }
-        }
-        fclose(file); // Closes the file after reading it.
-    }
-    return NULL;
-}
-
-/**
  * Producer function that reads input from the console, line per line.
  */
-void * readConsoleInput()
+void * read_console_input()
 {
     char fractalLine[LINE_LENGTH]; // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
     char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
@@ -203,13 +134,13 @@ void * readConsoleInput()
         printf("Please enter a fractal under the following format : name height width a b. \n");
         fgets(fractalLine, LINE_LENGTH, stdin);
 
-        struct fractal *fract = lineToFractal(fractalLine);
+        struct fractal *fract = line_to_fractal(fractalLine);
 
         // Make sure that the different producer threads aren't overwriting each other and thus missing fractals.
         sem_wait(&empty);
-        pthread_mutex_lock(&bufferMutex);
-        addToBuffer(fract); // Adds the newly read fractal to the buffer.
-        pthread_mutex_unlock(&bufferMutex);
+        pthread_mutex_lock(&stackMutex);
+        add_to_stack(fract); // Adds the newly read fractal to the stack.
+        pthread_mutex_unlock(&stackMutex);
         sem_post(&full);
 
         // Asks the user if they want to keep entering fractals.
@@ -264,8 +195,8 @@ int main(int argc, const char *argv[])
         }
     }
 
-    BUFFER_SIZE = fmax(maxThreads, nInputFiles) + 1;
-    buffer = (struct fractal **) malloc(BUFFER_SIZE * sizeof struct fractal *);
+    STACK_SIZE = fmax(maxThreads, nInputFiles) + 1;
+    stack = malloc(STACK_SIZE * sizeof struct fractal *);
 
     char** inputFiles;
     inputFiles = malloc(nInputFiles * sizeof(char*));
@@ -287,14 +218,14 @@ int main(int argc, const char *argv[])
 
 
     // Initialising mutexes and semaphores.
-    pthread_mutex_init(&bufferMutex, NULL);
-    sem_init(&empty, 0, BUFFER_SIZE);
+    pthread_mutex_init(&stackMutex, NULL);
+    sem_init(&empty, 0, STACK_SIZE);
     sem_init(&full, 0, 0);
 
     // Creating threads (one for every file).
     for (i = 0; i < nInputFiles; ++i)
     {
-        int err = pthread_create(&(threadRead[i]), NULL, readFileInput, (void *)argv[i]);
+        int err = pthread_create(&(threadRead[i]), NULL, read_file_input, (void *) argv[i]);
         if (err!=0){
             perror("pthread_creat");
             exit(EXIT_FAILURE);
@@ -305,7 +236,7 @@ int main(int argc, const char *argv[])
 
     //creation des threads de calcules;
     for(int i=0;i<maxThreads;i++){
-        int err=pthread_create(&(threadCount[i]),NULL,computeFractal,NULL);
+        int err=pthread_create(&(threadCount[i]),NULL,compute_fractal,NULL);
         if(err!=0){
             perror("pthread_creat");
             exit(EXIT_FAILURE);
