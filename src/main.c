@@ -1,5 +1,6 @@
-#define DEFAULT_NUMBER_OF_THREADS 7
 #define _GNU_SOURCE
+#define LINE_LENGTH 256
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,54 +10,40 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include "libfractal/fractal.h"
+#include "fractstack/fractstack.h"
+#include "prodcons/prodcons.h"
 
-pthread_mutex_t stack_mutex;// Mutex to control stack access.
-sem_t empty;// Determines whether the consumer threads can do calculations on a fractal from the stack.
-sem_t full;// Determines whether the producer threads can add another thread to the stack.
 
-int dPosition = 0;// Determines whether all .bmp files need to be generated.
-int maxThreadsPosition = 0;// Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
-int hyphenPosition = 0;// Determines whether the user is gonna enter fractals from the command line.
-
-struct fractal **stack;// Stack to store fractals.
-
-int nAddedFractals = 0;// Number of fractals that have been added to the stack.
-int nComputedFractals = 0;// Number of fractals whose values have been computed.
+int d_position = 0; // Determines whether all .bmp files need to be generated.
+int max_threads_position = 0; // Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
+int hyphen_position = 0; // Determines whether the user is gonna enter fractals from the command line.
 
 int STACK_SIZE;
 
 /**
- * Producer function that reads input from the console, line per line.
+ * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
  */
-void * read_console_input()
+void *read_console_input()
 {
-    char fractalLine[LINE_LENGTH]; // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
+    char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
     char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
 
-    bool hasNext = true; // Determines whether the user is gonna enter another fractal.
+    bool has_next = true; // Determines whether the user is gonna enter another fractal.
 
     // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
-    while (hasNext)
+    while (has_next)
     {
-        // Ask user to enter a fractal and store the result in fractalLine.
+        // Ask user to enter a fractal and store the result in fractal_line.
         printf("Please enter a fractal under the following format : name height width a b. \n");
-        fgets(fractalLine, LINE_LENGTH, stdin);
+        fgets(fractal_line, LINE_LENGTH, stdin);
 
-        struct fractal *fract = line_to_fractal(fractalLine);
-
-        // Make sure that the different producer threads aren't overwriting each other and thus missing fractals.
-        sem_wait(&empty);
-        pthread_mutex_lock(&stack_mutex);
-        add_to_stack(fract); // Adds the newly read fractal to the stack.
-        pthread_mutex_unlock(&stack_mutex);
-        sem_post(&full);
+        push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
 
         // Asks the user if they want to keep entering fractals.
         printf("Would you like to enter another fractal (y/n)? \n");
-        hasNext = strcasecmp(fgets(y, 2, stdin), "y");
+        has_next = strcasecmp(fgets(y, 2, stdin), "y");
     }
 
-    hyphenPosition = 0; // The user has finished manually entering fractals.
     return NULL;
 }
 
@@ -64,111 +51,145 @@ void * read_console_input()
 
 int main(int argc, const char *argv[])
 {
-    // Possible arguments for the program call.
-    const char dArg[3] = "-d";
-    const char maxThreadsArg[13] = "--maxthreads";
-    const char hyphenArg[2] = "-";
+    // Possible options for the program call.
+    const char d_arg[3] = "-d";
+    const char max_threads_arg[13] = "--maxthreads";
+    const char hyphen_arg[2] = "-";
 
-    int maxThreads = DEFAULT_NUMBER_OF_THREADS; // Test for optimal number of threads.
+    int max_threads = 7; // Test to find optimal number of threads.
 
-    int nInputFiles = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
+    int number_input_files = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
 
     int i;
     // Stop iterating once the loop reaches the output file which is always last or when the three modifiers have been set already, therefore not needing to iterate any longer.
-    for (i = 1; i < argc - 1 && (dPosition == 0 || maxThreadsPosition == 0 || hyphenPosition == 0); ++i)
+    for (i = 1; i < argc - 1; ++i)
     {
         // If one of the input files is -, the user will be inputting fractals from the command line (possibly among other input methods).
-        if (strcmp(argv[i], hyphenArg) == 0)
+        if (strcmp(argv[i], hyphen_arg) == 0)
         {
-            ++nInputFiles;
-            hyphenPosition = i;
+            ++number_input_files;
+            hyphen_position = i;
         }
         // [-d] is an argument determining whether all the input fractals need to be transformed into .bmp files by setting the value of the generateAll boolean.
-        else if (strcmp(argv[i], dArg) == 0)
+        else if (strcmp(argv[i], d_arg) == 0)
         {
-            dPosition = i;
+            d_position = i;
         }
         // [--maxthreads n] determines the maximal number of threads the program is allowed to use.
         // If there is a specification for the maximal number of threads, but the value of n is less than one, one thread is used by default. If there is no specification at all the default value is seven, because that number seems to be optimal.
-        else if (strcmp(argv[i], maxThreadsArg) == 0)
+        else if (strcmp(argv[i], max_threads_arg) == 0)
         {
-            maxThreads = fmax(1, (int) strtol(argv[i + 1], (char **) NULL, 10));
-            maxThreadsPosition = i;
+            max_threads = fmax(1, (int) strtol(argv[i + 1], (char **) NULL, 10));
+            max_threads_position = i;
             ++i; // Skip the n parameter.
         }
         // If the argument isn't a modifier, it must be the name of an input file.
         else
         {
-            ++nInputFiles;
+            ++number_input_files;
         }
     }
 
-    STACK_SIZE = fmax(maxThreads, nInputFiles) + 1;
-    stack = malloc(STACK_SIZE * sizeof struct fractal *);
+    STACK_SIZE = fmax(max_threads, number_input_files) + 1;
 
-    char** inputFiles;
-    inputFiles = malloc(nInputFiles * sizeof(char*));
+    char** input_files;
+    input_files = malloc(number_input_files * sizeof(char *));
+	if (input_files == NULL)
+	{
+		printf("Error with input_files malloc in main. \n");
+	}
+
     int j = 0;
-
-    for (i = 1; i < argc - 1 && j < nInputFiles; ++i)
+    for (i = 1; i < argc - 1 && j < number_input_files; ++i)
     {
         // If the argument is not one of the modifiers, it is an input file.
-        if (i != dPosition && i != maxThreadsPosition  && i != maxThreadsPosition + 1 && i != hyphenPosition)
+        if (i != d_position && i != max_threads_position  && i != max_threads_position + 1 && i != hyphen_position)
         {
-            inputFiles[j] = malloc((strlen(argv[i]) + 1) * sizeof(char));
-            strcpy(inputFiles[++j], argv[i]);
+            input_files[j] = malloc((strlen(argv[i]) + 1) * sizeof(char));
+			if (input_files[j] == NULL)
+			{
+				printf("Error with input_files[j] malloc in main. \n");
+			}
+            strcpy(input_files[j], argv[i]);
+			++j;
         }
     }
 
-    pthread_t threadRead[nInputFiles]; // One producer thread for every input file.
-    pthread_t threadCount[maxThreads]; // The number of consumer threads is either set by the program call or by a default value defined by DEFAULT_NUMBER_OF_THREADS.
+	int error = init(STACK_SIZE, max_threads);
+	if (error != 0)
+	{
+		return EXIT_FAILURE;
+	}
 
+    pthread_t producer_threads[number_input_files]; // One producer thread for every input file.
+    pthread_t consumer_threads[max_threads]; // The number of consumer threads is either set by the program call or by a default value defined by DEFAULT_NUMBER_OF_THREADS.
 
+	printf("There are %d files (and thus producer threads). \n", number_input_files);
+	printf("There are %d consumer threads. \n", max_threads);
 
-    // Initialising mutexes and semaphores.
-    pthread_mutex_init(&stack_mutex, NULL);
-    sem_init(&empty, 0, STACK_SIZE);
-    sem_init(&full, 0, 0);
-
-    // Creating threads (one for every file).
-    for (i = 0; i < nInputFiles; ++i)
+    // Creating producer threads (one for every file).
+    for (i = 0; i < number_input_files; ++i)
     {
-        int err = pthread_create(&(threadRead[i]), NULL, read_file_input, (void *) argv[i]);
-        if (err!=0){
-            perror("pthread_creat");
-            exit(EXIT_FAILURE);
+        int err = pthread_create(&(producer_threads[i]), NULL, read_file_input, input_files[i]);
+        if (err != 0)
+		{
+            perror("pthread_create");
         }
+		else
+		{
+			printf("Creating producer thread number %d. \n", i);
+		}
     }
 
-
-
-    //creation des threads de calcules;
-    for(int i=0;i<maxThreads;i++){
-        int err=pthread_create(&(threadCount[i]),NULL,compute_fractal,NULL);
-        if(err!=0){
-            perror("pthread_creat");
-            exit(EXIT_FAILURE);
+    // Creating consumer threads.
+    for (i = 0; i < max_threads; ++i)
+	{
+        int err = pthread_create(&(consumer_threads[i]), NULL, compute_fractal, NULL);
+        if (err != 0)
+		{
+            perror("pthread_create");
         }
+		else
+		{
+			printf("Creating consumer thread number %d. \n", i);
+		}
     }
 
+	// If the console input option was activated, read input from the console.
+	if (hyphen_position != 0)
+	{
+		read_console_input();
+	}
 
 
-    //join thread de lecture
-    for(int i=nInputFiles-1;i>=0;i--) {
-        int err=pthread_join(threadRead[i],NULL);
-        if(err!=0){
-            perror("pthread_creat");
-            exit(EXIT_FAILURE);
+
+    // Join producer threads.
+    for (i = number_input_files - 1; i >= 0; --i)
+	{
+        int err = pthread_join(producer_threads[i], NULL);
+        if (err != 0)
+		{
+            perror("pthread_join");
         }
+		else
+		{
+			printf("Joining producer thread number %d. \n", i);
+		}
     }
 
-    //join thread de clacule
-    for(int i=maxThreads-1;i>=0;i--) {
-        int err=pthread_join(threadCount[i],NULL);
-        if(err!=0){
-            perror("pthread_creat");
-            exit(EXIT_FAILURE);
+	kill(max_threads);
+
+    // Join consumer threads.
+    for (i = max_threads - 1; i >= 0; --i) {
+        int err = pthread_join(consumer_threads[i], NULL);
+        if (err != 0)
+		{
+            perror("pthread_join");
         }
+		else
+		{
+			printf("Joining consumer thread number %d. \n", i);
+		}
     }
 
 
