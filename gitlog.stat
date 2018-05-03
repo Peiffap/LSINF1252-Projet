@@ -1,3 +1,84 @@
+commit f2aa79f641b23e77f31511fc317f9f8132b84c6e
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:31:11 2018 +0200
+
+    Several changes to main, moving around functions for improved clarity.
+
+ src/libfractal/fractstack/fractstack.c |  6 ------
+ src/libfractal/fractstack/fractstack.h |  6 ------
+ src/main.c                             | 12 ++++++------
+ 3 files changed, 6 insertions(+), 18 deletions(-)
+
+commit 92d70b475108b85ff87191ccf2ddb59399eea1e7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:30:32 2018 +0200
+
+    Added push function to fractstack.c.
+
+ src/fractstack/fractstack.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ src/fractstack/fractstack.h |  6 ++++++
+ 2 files changed, 51 insertions(+)
+
+commit c4e9edd77a1af1fb0691bcbfce68958fa1ae4285
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 21:21:09 2018 +0200
+
+    Remove critical section handling, rename variables to snake_case standard.
+
+ src/prodcons/prodcons.c | 30 +++++++++++++-----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
+
+commit 5695917e690e2c670fe38fe4772f6d6c1c461cc7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 20:56:40 2018 +0200
+
+    Moved some functions to prodcons and cleaned up some code. Also working on implementing buffer with a stack.
+
+ src/libfractal/fractstack/fractstack.c |   6 ++
+ src/libfractal/fractstack/fractstack.h |   6 ++
+ src/main.c                             | 137 ++++++++-------------------------
+ src/prodcons/prodcons.c                |  88 +++++++++++++++++++++
+ src/prodcons/prodcons.h                |  20 +++++
+ 5 files changed, 154 insertions(+), 103 deletions(-)
+
+commit 93c8476edc67e5e333fbf0a9abbe01f71529e009
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 2 21:21:50 2018 +0200
+
+    Group test.c and test.h into Test folder, inside src.
+
+ Text.c => src/Test/Text.c | 0
+ Text.h => src/Test/Text.h | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e90e2c37074c68bd266be726e35488c80293df35
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 2 20:40:39 2018 +0200
+
+    Fix mistake in fractal_new().
+
+ src/libfractal/fractal.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+commit aa9450db9666b8773d19c4bb3ec3d164ec6331bc
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 2 20:25:54 2018 +0200
+
+    Add gitlog.stat.
+
+ gitlog.stat | 426 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/main.c  |   2 +-
+ 2 files changed, 427 insertions(+), 1 deletion(-)
+
+commit 03b62bff40fc7b7ad7620812c94eca5d12269df8
+Author: Gilles Peiffer <gilles.peiffer@outlook.com>
+Date:   Wed May 2 20:16:06 2018 +0200
+
+    Create .gitignore
+
+ .gitignore | 152 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 152 insertions(+)
+
 commit 7d4e66236e0d6c8ca29e77db0bd38198e61d3f17
 Author: Peiffap <gilles.peiffer@hotmail.com>
 Date:   Wed May 2 19:52:59 2018 +0200
