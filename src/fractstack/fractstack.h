@@ -1,5 +1,5 @@
-#ifndef _PRODCONS_H
-#define _PRODCONS_H
+#ifndef _FRACTSTACK_H
+#define _FRACTSTACK_H
 
 // Nodes are used to represent the stack containing the fractals waiting to be computed. Producer threads can push in new fractals they finished reading while consumer threads can remove the ones they compute.
 typedef struct node {

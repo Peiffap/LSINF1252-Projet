@@ -3,14 +3,14 @@
 
 extern struct fractal *best_fractal;
 extern pthread_mutex_t best_mutex;
-extern const int d_position;
+extern int d_position;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
  *
  * @param file_name a string containing the name of the file where the fractal is stored.
  */
-void *read_file_input(const char *file_name);
+void *read_file_input(void *file_name);
 
 /**
  * This function takes a string describing a fractal as input and returns the fractal described by that line.

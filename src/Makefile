@@ -1,7 +1,7 @@
 all: main
 	make clean
 
-main: main.o fractstack/fractstacktack.o prodcons/prodcons.o
+main: main.o fractstack/fractstack.o prodcons/prodcons.o
 	cd libfractal && make
 	gcc -Wall -g -o main main.o fractstack/fractstack.o libfractal/libfractal.a prodcons/prodcons.o -lSDL -lpthread
 

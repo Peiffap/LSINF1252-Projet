@@ -4,7 +4,6 @@
 #include <pthread.h>
 #include "../libfractal/fractal.h"
 #include "fractstack.h"
-#include "main.h"
 
 static pthread_mutex_t stack_mutex;
 static sem_t empty;
@@ -20,7 +19,7 @@ static node *head = NULL;
  */
 int push(struct fractal *f)
 {
-	node *new_node = malloc(sizeof node);
+	node *new_node = malloc(sizeof(struct node));
 
 	if (new_node == NULL)
 	{
@@ -88,7 +87,7 @@ int init(int size, int max_thread)
 	int i;
 	for (i = 0; i < max_thread; ++i)
 	{
-		node *new_node = malloc(sizeof node);
+		node *new_node = malloc(sizeof(struct node));
 		if (new_node == NULL){
 			printf("Error with malloc in init. \n");
 			return -1;

@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdbool.h>
 #include <math.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include "libfractal/fractal.h"
-#include "fractstack/fractstack.h"
-#include "prodcons/prodcons.h"
+#include "./libfractal/fractal.h"
+#include "./fractstack/fractstack.h"
+#include "./prodcons/prodcons.h"
 #include "main.h"
 
 
@@ -99,7 +98,7 @@ int main(int argc, const char *argv[])
     // Creating producer threads (one for every file).
     for (i = 0; i < number_input_files; ++i)
     {
-        int err = pthread_create(&(producer_threads[i]), NULL, read_file_input, input_files[i]);
+        int err = pthread_create(&(producer_threads[i]), NULL, &read_file_input, input_files[i]);
         if (err != 0)
 		{
             perror("pthread_create");
@@ -113,7 +112,7 @@ int main(int argc, const char *argv[])
     // Creating consumer threads.
     for (i = 0; i < max_threads; ++i)
 	{
-        int err = pthread_create(&(consumer_threads[i]), NULL, compute_fractal, NULL);
+        int err = pthread_create(&(consumer_threads[i]), NULL, &compute_fractal, NULL);
         if (err != 0)
 		{
             perror("pthread_create");

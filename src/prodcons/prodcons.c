@@ -5,10 +5,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "../libfractal/fractal.h"
 #include "prodcons.h"
 #include "../fractstack/fractstack.h"
-#include "main.h"
+#include "../main.h"
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
 struct fractal *best_fractal; // Fractal with highest average number of iterations.
@@ -20,8 +21,9 @@ int hyphen_position;
  *
  * @param file_name a string containing the name of the file where the fractal is stored.
  */
-void *read_file_input(const char *file_name)
+void *read_file_input(void *file_name)
 {
+	const char *file_name_str = (char *) file_name;
     FILE *file = NULL;
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 
@@ -30,7 +32,7 @@ void *read_file_input(const char *file_name)
 		printf("Error with malloc in read_file_input. \n");
 	}
 
-    file = fopen(file_name, "r"); // Opens the file specified by file_name with read permission.
+    file = fopen(file_name_str, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
         printf("Error with fopen during file opening. \n");
@@ -43,7 +45,7 @@ void *read_file_input(const char *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                add_to_stack(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+                push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
             }
         }
         fclose(file); // Closes the file after reading it.
@@ -65,7 +67,7 @@ struct fractal *line_to_fractal(const char *line)
 {
     int h, w; // Height and width of the fractal.
     double a, b; // Real and imaginary part of the fractal's constant parameter.
-    const char *name = malloc(sizeof(char) * 65); // The longest the name field can be is sixty-four characters, without taking into account the null terminator.
+    char *name = malloc(sizeof(char) * 65); // The longest the name field can be is sixty-four characters, without taking into account the null terminator.
 
     if (name == NULL)
     {
