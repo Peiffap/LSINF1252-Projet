@@ -67,37 +67,37 @@ void fractal_set_value(struct fractal *f, int x, int y, int val);
  */
 int fractal_get_width(const struct fractal *f);
 
-/**
+/*
  * fractal_get_computed: returns the value of the computed attribute of a fractal.
  *
- * @param f fractal.
- * @return the value of the computed field : 0 if false, true otherwise.
+ * @f: fractale
+ * @return: the value of the computed field : 0 if false, true otherwise.
  */
 int fractal_get_computed(const struct fractal *f);
 
 /**
  * fractal_set_computed: sets the value of the computed attribute of a fractal.
  *
- * @param f fractal.
- * @param comp the value to which the computed field is to be set,
+ * @f: fractale
+ * @comp: the value to which the computed field is to be set,
  */
-void fractal_set_computed(const struct fractal *f, int comp);
+void fractal_set_computed(struct fractal *f, int comp);
 
-/**
+/*
  * fractal_get_average: returns the average value of the number of iterations for a fractal.
  *
- * @param f fractal.
- * @return the average value of the fractal's number of iterations (averaged over all the pixels).
+ * @f: fractale
+ * @return: the average value of the fractal's number of iterations (averaged over all the pixels).
  */
 double fractal_get_average(const struct fractal *f);
 
-/**
+/*
  * fractal_set_average: sets the value of the average number of iterations of a fractal.
  *
- * @param f fractal.
- * @param avg the average number of iterations for a fractal.
+ * @f: fractale
+ * @avg: the average number of iterations for a fractal.
  */
-void fractal_set_average(const struct fractal *f, double avg);
+void fractal_set_average(struct fractal *f, double avg);
 
 /*
  * fractal_get_height: retourne la hauteur de l'image de la fractale
