@@ -23,7 +23,7 @@ lib:
 	cd libfractal && make
 	make clean
 
-# Still need to add Test/*.o between fractstack/*.o and prodcons/*.o
+# Still need to add Test/*.o between libfractal/*.o and fractstack/*.o
 clean:
 	rm -rf *.o libfractal/*.o libfractal/*.a fractstack/*.o prodcons/*.o
 

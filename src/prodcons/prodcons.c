@@ -109,7 +109,7 @@ void *compute_fractal()
         }
     }
 
-    double avg = (double) avg / (double) (width * height); // Computes the average number of iterations for a given fractal.
+    double avg = (double) totalIterations / (double) (width * height); // Computes the average number of iterations for a given fractal.
     fractal_set_average(fract, avg); // Stores this average value in the fractal's average attribute.
 
     // If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
