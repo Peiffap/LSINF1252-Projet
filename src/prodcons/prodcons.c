@@ -14,6 +14,7 @@ pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value
 struct fractal *best_fractal; // Fractal with highest average number of iterations.
 int d_position;
 int hyphen_position;
+double best_avg = 0.0;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
@@ -108,27 +109,31 @@ void *compute_fractal()
     }
 
     double avg = (double) totalIterations / (double) (width * height); // Computes the average number of iterations for a given fractal.
-    fractal_set_average(fract, avg); // Stores this average value in the fractal's average attribute.
 
     // If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
     if (d_position != 0)
     {
-        write_bitmap_sdl(fract, fractal_get_name(fract));
+		int len = 65;
+		char *temp = malloc((len + 5) * sizeof(char));
+		printf("Currently computing %s. \n", fractal_get_name(fract));
+		strncpy(temp, fractal_get_name(fract), len);
+        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
+		free(temp);
     }
 
     pthread_mutex_lock(&best_mutex);
 
     // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
-    if (avg > fractal_get_average(best_fractal))
+    if (avg > best_avg)
     {
-		printf("A fractal with a higher average (%f) has been found. \n", avg);
+		printf("A fractal with a higher average (%f > %f) has been found. \n", avg, best_avg);
 		free(best_fractal);
         best_fractal = fract;
+		best_avg = avg;
     }
     pthread_mutex_unlock(&best_mutex);
 
     fractal_free(fract);
-    return NULL;
 }
 
 /**
@@ -154,6 +159,5 @@ void *read_console_input()
         printf("Would you like to enter another fractal (y/n)? \n");
         has_next = strcasecmp(fgets(y, 2, stdin), "y");
     }
-
-    return NULL;
+	free(fractal_line);
 }

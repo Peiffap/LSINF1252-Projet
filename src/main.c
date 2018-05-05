@@ -23,7 +23,7 @@ int main(int argc, const char *argv[])
     const char max_threads_arg[13] = "--maxthreads";
     const char hyphen_arg[2] = "-";
 
-    int max_threads = 7; // Test to find optimal number of threads.
+    int max_threads = 1; // Test to find optimal number of threads.
 
     int number_input_files = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
 
@@ -69,6 +69,15 @@ int main(int argc, const char *argv[])
         }
     }
 
+	if (number_input_files == 1)
+	{
+		printf("There is 1 file. \n");
+	}
+	else
+	{
+		printf("There are %d files. \n", number_input_files);
+	}
+
 	if (max_threads >= number_input_files)
 	{
 		STACK_SIZE = max_threads + 1;
@@ -92,6 +101,7 @@ int main(int argc, const char *argv[])
         if (i != d_position && i != max_threads_position  && i != max_threads_position + 1 && i != hyphen_position)
         {
             input_files[j] = malloc((strlen(argv[i]) + 1) * sizeof(char));
+			printf("Storing file: %s. \n", argv[i]);
 			if (input_files[j] == NULL)
 			{
 				printf("Error with input_files[j] malloc in main. \n");
@@ -164,7 +174,7 @@ int main(int argc, const char *argv[])
 
 
     // Join producer threads.
-    for (i = number_input_files - 1; i >= 0; --i)
+    for (i = 0; i < number_input_files; ++i)
 	{
         int err = pthread_join(producer_threads[i], NULL);
         if (err != 0)
@@ -180,7 +190,7 @@ int main(int argc, const char *argv[])
 	kill(max_threads);
 
     // Join consumer threads.
-    for (i = max_threads - 1; i >= 0; --i) {
+    for (i = 0; i < max_threads; ++i) {
         int err = pthread_join(consumer_threads[i], NULL);
         if (err != 0)
 		{
@@ -195,12 +205,16 @@ int main(int argc, const char *argv[])
 	// If the [-d] option wasn't selected, the only the best fractal needs to be converted into a bmp file.
 	if (d_position == 0)
 	{
-		printf("The fractal with the highest average number of iterations was %s \n", fractal_get_name(best_fractal));
+		printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(best_fractal));
 		write_bitmap_sdl(best_fractal, fractal_get_name(best_fractal));
 	}
 
 	destroy();
 	pthread_mutex_destroy(&best_mutex);
 	fractal_free(best_fractal);
+
+	free(input_files[i]);
+	free(input_files);
+
 	return EXIT_SUCCESS;
 }
