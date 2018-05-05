@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdbool.h>
 #include "../libfractal/fractal.h"
 #include "prodcons.h"
 #include "../fractstack/fractstack.h"
@@ -140,10 +139,10 @@ void *read_console_input()
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
     char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
 
-    bool has_next = true; // Determines whether the user is gonna enter another fractal.
+    int has_next = 0; // Determines whether the user is gonna enter another fractal.
 
     // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
-    while (has_next)
+    while (has_next == 0)
     {
         // Ask user to enter a fractal and store the result in fractal_line.
         printf("Please enter a fractal under the following format : name height width a b. \n");

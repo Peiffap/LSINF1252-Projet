@@ -3,7 +3,7 @@ all: main
 
 main: main.o fractstack/fractstack.o prodcons/prodcons.o
 	cd libfractal && make
-	gcc -Wall -g -o main main.o fractstack/fractstack.o libfractal/libfractal.a prodcons/prodcons.o -lSDL -lpthread
+	gcc -Wall -g -o main main.o fractstack/fractstack.o libfractal/libfractal.a prodcons/prodcons.o -lSDL2 -lpthread
 
 main.o: main.c
 	gcc -Wall -g -c main.c -lpthread

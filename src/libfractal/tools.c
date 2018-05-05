@@ -6,7 +6,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
+// Had to change this from #include <SDL.h> because the file installed in a different place.
 #include "fractal.h"
 
 #define MAX_ITER 4096
