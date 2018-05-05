@@ -35,8 +35,6 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
         }
     }
     newFractal->values = data; // Point to local array.
-    newFractal->computed = 0; // When initialising the fractal, it's safe to say it hasn't been computed yet.
-    newFractal->average = 0.0; // Default value, the average hasn't been computed yet when the fractal is created.
 
     return newFractal;
 }
@@ -78,26 +76,6 @@ int fractal_get_height(const struct fractal *f)
 int fractal_get_width(const struct fractal *f)
 {
     return f->theWidth;
-}
-
-int fractal_get_computed(const struct fractal *f)
-{
-    return f->computed;
-}
-
-void fractal_set_computed(struct fractal *f, int comp)
-{
-    f->computed = comp;
-}
-
-double fractal_get_average(const struct fractal *f)
-{
-    return f->average;
-}
-
-void fractal_set_average(struct fractal *f, double avg)
-{
-    f->average = avg;
 }
 
 double fractal_get_a(const struct fractal *f)
