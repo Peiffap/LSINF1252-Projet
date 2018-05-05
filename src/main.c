@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <math.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include "./libfractal/fractal.h"
@@ -22,7 +21,7 @@ int main(int argc, const char *argv[])
     // Possible options for the program call.
     const char d_arg[3] = "-d";
     const char max_threads_arg[13] = "--maxthreads";
-    const char hyphen_arg[2] = "-";
+    char hyphen_arg[2] = "-";
 
     int max_threads = 7; // Test to find optimal number of threads.
 
@@ -37,17 +36,19 @@ int main(int argc, const char *argv[])
         {
             ++number_input_files;
             hyphen_position = i;
+			printf("The hyphen argument was argument number %d. \n", i);
         }
         // [-d] is an argument determining whether all the input fractals need to be transformed into .bmp files by setting the value of the generateAll boolean.
         else if (strcmp(argv[i], d_arg) == 0)
         {
             d_position = i;
+			printf("The [-d] argument was argument number %d. \n", i);
         }
         // [--maxthreads n] determines the maximal number of threads the program is allowed to use.
         // If there is a specification for the maximal number of threads, but the value of n is less than one, one thread is used by default. If there is no specification at all the default value is seven, because that number seems to be optimal.
         else if (strcmp(argv[i], max_threads_arg) == 0)
         {
-            int value = (int) strtol(argv[i + 1], (char **) NULL, 10));
+            int value = (int) strtol(argv[i + 1], (char **) NULL, 10);
             if (value > 1)
             {
                 max_threads = value;
@@ -58,6 +59,7 @@ int main(int argc, const char *argv[])
             }
             max_threads_position = i;
             ++i; // Skip the n parameter.
+			printf("The [--maxthreads n] arguments were arguments number %d and %d. \n", i-1, i);
         }
         // If the argument isn't a modifier, it must be the name of an input file.
         else
@@ -66,7 +68,14 @@ int main(int argc, const char *argv[])
         }
     }
 
-    STACK_SIZE = fmax(max_threads, number_input_files) + 1;
+	if (max_threads >= number_input_files)
+	{
+		STACK_SIZE = max_threads + 1;
+	}
+	else
+	{
+		STACK_SIZE = number_input_files + 1;
+	}
 
     char** input_files;
     input_files = malloc(number_input_files * sizeof(char *));
