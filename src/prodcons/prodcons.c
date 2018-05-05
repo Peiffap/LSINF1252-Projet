@@ -5,16 +5,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include "../libfractal/fractal.h"
 #include "prodcons.h"
 #include "../fractstack/fractstack.h"
 #include "../main.h"
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
-struct fractal *best_fractal; // Fractal with highest average number of iterations.
+struct fractal *best_fractal = NULL; // Fractal with highest average number of iterations.
 int d_position;
 int hyphen_position;
-double best_avg = 0.0;
+static double best_avg = 0.0;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
@@ -34,7 +35,7 @@ void *read_file_input(void *file_name)
     file = fopen(file_name_str, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
-        printf("Error with fopen during file opening. \n");
+        printf("Error with fopen during file opening : %s. \n", strerror(errno));
     }
     else
     {
@@ -50,7 +51,6 @@ void *read_file_input(void *file_name)
         fclose(file); // Closes the file after reading it.
     }
 	free(fractal_line);
-	free(file_name);
     pthread_exit(NULL);
 }
 
@@ -88,7 +88,7 @@ struct fractal *line_to_fractal(const char *line)
 /**
  * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
  */
-void *compute_fractal()
+void *compute_fractal(void *args)
 {
 	while (1)
 	{
@@ -108,7 +108,7 @@ void *compute_fractal()
 	        }
 	    }
 
-	    double avg = (double) totalIterations / (double) (width * height); // Computes the average number of iterations for a given fractal.
+	    double avg = totalIterations / (width * height); // Computes the average number of iterations for a given fractal.
 
 	    // If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
 	    if (d_position != 0)
@@ -129,8 +129,8 @@ void *compute_fractal()
 		    {
 				printf("A fractal with a higher average (%f > %f) has been found. \n", avg, best_avg);
 				free(best_fractal);
-		        best_fractal = fract;
 				best_avg = avg;
+		        best_fractal = fract;
 		    }
 			else
 			{
@@ -147,22 +147,38 @@ void *compute_fractal()
 void *read_console_input()
 {
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-    char y[2]; // Stores the user's answer when asked if they want to enter another fractal from standard input (y/n).
+	size_t len;
 
     int has_next = 0; // Determines whether the user is gonna enter another fractal.
+
+	int read = -1; // Determines if getline was succesful.
 
     // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
     while (has_next == 0)
     {
         // Ask user to enter a fractal and store the result in fractal_line.
         printf("Please enter a fractal under the following format : name height width a b. \n");
-        fgets(fractal_line, LINE_LENGTH, stdin);
+        int read = getline(&fractal_line, &len, stdin);
+
+		if (read == -1)
+		{
+			printf("Error with getline in read_console_input. \n");
+			free(fractal_line);
+			break;
+		}
 
         push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
 
         // Asks the user if they want to keep entering fractals.
-        printf("Would you like to enter another fractal (y/n)? \n");
-        has_next = strcasecmp(fgets(y, 2, stdin), "y");
+        printf("Enter 0 if you wish to continue entering fractals. Otherwise, enter 1. \n");
+		read = getline(&fractal_line, &len, stdin);
+		if (read == -1)
+		{
+			printf("Error with getline in read_console_input. \n");
+			free(fractal_line);
+			break;
+		}
+        has_next = (int) strtol(fractal_line, (char **) NULL, 10);
     }
 	free(fractal_line);
 }

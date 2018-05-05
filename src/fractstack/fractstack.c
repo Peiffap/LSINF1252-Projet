@@ -84,14 +84,15 @@ int init(int size, int max_thread)
 	sem_init(&empty, 0, size);
 	sem_init(&full, 0, 0);
 
+	node *new_node = malloc(sizeof(struct node));
+	if (new_node == NULL){
+		printf("Error with malloc in init. \n");
+		return -1;
+	}
+
 	int i;
 	for (i = 0; i < max_thread; ++i)
 	{
-		node *new_node = malloc(sizeof(struct node));
-		if (new_node == NULL){
-			printf("Error with malloc in init. \n");
-			return -1;
-		}
 		new_node->f = NULL;
 		pthread_mutex_lock(&stack_mutex);
 		new_node->next = head;
@@ -125,4 +126,20 @@ void destroy()
 	pthread_mutex_destroy(&stack_mutex);
 	sem_destroy(&empty);
 	sem_destroy(&full);
+}
+
+/**
+ * Frees the stack.
+ */
+void free_stack()
+{
+	struct node* tmp;
+
+	while (head != NULL)
+	{
+		tmp = head;
+		head = head->next;
+		fractal_free(tmp->f);
+		free(tmp);
+	}
 }

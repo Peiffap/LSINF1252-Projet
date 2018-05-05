@@ -11,13 +11,7 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
         return NULL;
     }
 
-    char *n = malloc((strlen(name) + 1) * sizeof(char)); // Allocate space for string and null terminator.
-	if (n == NULL)
-	{
-		return NULL;
-	}
-    strcpy(n, name); // Copy the argument string into the newly allocated memory space.
-    new_fractal->the_name = n;
+    new_fractal->the_name = strdup(name);
     new_fractal->the_width = width;
     new_fractal->the_height = height;
     new_fractal->the_a = a;

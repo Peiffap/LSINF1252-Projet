@@ -45,4 +45,9 @@ void kill(int max_thread);
  */
 void destroy();
 
+/**
+ * Frees the stack.
+ */
+void free_stack();
+
 #endif
