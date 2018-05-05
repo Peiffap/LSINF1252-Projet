@@ -56,6 +56,7 @@ void fractal_free(struct fractal *f)
     free(f->values); // Free values array.
 
     free(f); // Free struct.
+
 }
 
 const char *fractal_get_name(const struct fractal *f)
@@ -70,7 +71,7 @@ int fractal_get_value(const struct fractal *f, int x, int y)
 
 void fractal_set_value(struct fractal *f, int x, int y, int val)
 {
-    f->values[x][y] = val;
+	f->values[x][y] = val;
 }
 
 int fractal_get_height(const struct fractal *f)

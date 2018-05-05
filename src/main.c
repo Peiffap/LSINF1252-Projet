@@ -118,7 +118,7 @@ int main(int argc, const char *argv[])
 	}
 
     pthread_t producer_threads[number_input_files]; // One producer thread for every input file.
-    pthread_t consumer_threads[max_threads]; // The number of consumer threads is either set by the program call or by a default value defined by DEFAULT_NUMBER_OF_THREADS.
+    pthread_t consumer_threads[max_threads]; // The number of consumer threads is either set by the program call or by a default value.
 
 	if (number_input_files == 1)
 	{
