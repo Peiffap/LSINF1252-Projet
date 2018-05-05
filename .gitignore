@@ -150,3 +150,5 @@ xcuserdata/
 
 
 # End of https://www.gitignore.io/api/c,xcode,macos,linux,valgrind
+
+*.bmp
