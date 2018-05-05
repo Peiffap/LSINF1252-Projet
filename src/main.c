@@ -21,7 +21,7 @@ int main(int argc, const char *argv[])
     // Possible options for the program call.
     const char d_arg[3] = "-d";
     const char max_threads_arg[13] = "--maxthreads";
-    char hyphen_arg[2] = "-";
+    const char hyphen_arg[2] = "-";
 
     int max_threads = 7; // Test to find optimal number of threads.
 
@@ -59,12 +59,13 @@ int main(int argc, const char *argv[])
             }
             max_threads_position = i;
             ++i; // Skip the n parameter.
-			printf("The [--maxthreads n] arguments were arguments number %d and %d. \n", i-1, i);
+			printf("The [--maxthreads n] arguments were arguments number %d and %d. \n", i - 1, i);
         }
         // If the argument isn't a modifier, it must be the name of an input file.
         else
         {
             ++number_input_files;
+			printf("%s \n", argv[i]);
         }
     }
 
@@ -109,8 +110,22 @@ int main(int argc, const char *argv[])
     pthread_t producer_threads[number_input_files]; // One producer thread for every input file.
     pthread_t consumer_threads[max_threads]; // The number of consumer threads is either set by the program call or by a default value defined by DEFAULT_NUMBER_OF_THREADS.
 
-	printf("There are %d files (and thus producer threads). \n", number_input_files);
-	printf("There are %d consumer threads. \n", max_threads);
+	if (number_input_files == 1)
+	{
+		printf("There is 1 producer thread. \n");
+	}
+	else
+	{
+		printf("There are %d producer threads. \n", number_input_files);
+	}
+	if (max_threads == 1)
+	{
+		printf("There is 1 consumer thread. \n");
+	}
+	else
+	{
+		printf("There are %d consumer threads. \n", max_threads);
+	}
 
     // Creating producer threads (one for every file).
     for (i = 0; i < number_input_files; ++i)

@@ -23,14 +23,13 @@ int hyphen_position;
 void *read_file_input(void *file_name)
 {
 	const char *file_name_str = (char *) file_name;
-    FILE *file = NULL;
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-
 	if (fractal_line == NULL)
 	{
 		printf("Error with malloc in read_file_input. \n");
 	}
 
+	FILE *file = NULL;
     file = fopen(file_name_str, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
@@ -118,6 +117,7 @@ void *compute_fractal()
     }
 
     pthread_mutex_lock(&best_mutex);
+
     // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
     if (avg > fractal_get_average(best_fractal))
     {
