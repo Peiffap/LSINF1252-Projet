@@ -2,11 +2,11 @@
 #define _FRACTAL_H
 
 struct fractal {
-    char *theName;
-    int theWidth;
-    int theHeight;
-    int theA;
-    int theB;
+    char *the_name;
+    int the_width;
+    int the_height;
+    int the_a;
+    int the_b;
     int **values;
 };
 
