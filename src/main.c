@@ -87,16 +87,33 @@ int main(int argc, const char *argv[])
 
 	number_files -= has_hyphen;
 
+	printf("number_files : %d. \n", number_files);
+
     char *files[number_files];
 
     int j = 0;
     for (i = 1; i < argc - 1 && j < number_files; ++i)
     {
+		printf("i : %d. \n", i);
         // If the argument is not one of the options, it is an input file.
-        if (i != d_position && i != max_threads_position  && i != max_threads_position + 1 && i != hyphen_position)
-        {
-            files[++j] = strdup(argv[i]);
-        }
+		if (max_threads_position == 0)
+		{
+			if (i != d_position && i != hyphen_position)
+	        {
+	            files[j] = strdup(argv[i]);
+				printf("files[%d] : %s. \n", j, files[j]);
+				++j;
+	        }
+		}
+		else
+		{
+			if (i != d_position && i != max_threads_position && i != max_threads_position + 1 && i != hyphen_position)
+	        {
+	            files[j] = strdup(argv[i]);
+				printf("files[%d] : %s. \n", j, files[j]);
+				++j;
+	        }
+		}
     }
 
 	int error = init(STACK_SIZE, max_threads);
@@ -230,13 +247,11 @@ int main(int argc, const char *argv[])
 		strncpy(temp, argv[argc - 1], len);
 		write_bitmap_sdl(best_fractal, strcat(temp, ".bmp"));
 		free(temp);
+		fractal_free(best_fractal);
 	}
-
-	printf("best_fractal || %s, %d, %d, %lf, %lf\n", fractal_get_name(best_fractal), fractal_get_width(best_fractal), fractal_get_height(best_fractal), fractal_get_a(best_fractal), fractal_get_b(best_fractal));
 
 	destroy();
 	pthread_mutex_destroy(&best_mutex);
-	fractal_free(best_fractal);
 	// free_stack(); // Free the stack.
 
 	for (i = 0; i < number_files; ++i)

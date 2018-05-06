@@ -23,7 +23,7 @@ static double best_avg = 0.0;
  */
 void *read_file_input(void *file_name)
 {
-	const char *file_name_str = (char *) file_name;
+	char *file_name_str = file_name;
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 	if (fractal_line == NULL)
 	{
@@ -31,6 +31,7 @@ void *read_file_input(void *file_name)
 	}
 
 	FILE *file = NULL;
+	printf("file_name_str : %s. \n", file_name_str);
     file = fopen(file_name_str, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
@@ -106,6 +107,7 @@ void *compute_fractal(void *args)
 	        for (j = 0; j < height; ++j)
 	        {
 	            fractal_compute_value(fract, i, j); // Computes the number of iterations for a given pixel of the fractal and stores this value in the values array of the fractal.
+				printf("x : %d || y : %d || val : %d. \n", i, j, fractal_get_value(fract, i, j));
 	            totalIterations += fractal_get_value(fract, i, j); // Sums up the total iterations using the number of iterations set in the previous line.
 	        }
 	    }
