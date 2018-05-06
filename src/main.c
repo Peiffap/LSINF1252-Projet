@@ -14,16 +14,16 @@ int main(int argc, const char *argv[])
 	int max_threads_position = 0; // Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
 	int hyphen_position = 0; // Determines whether the user is gonna enter fractals from the command line.
 
-	int STACK_SIZE = 20;
+	int STACK_SIZE = 20; // Default value for the number of places in the buffer.
 
     int max_threads = 7; // Test to find optimal number of threads.
 
     int number_files = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
 
-	int has_hyphen = 0;
+	int has_hyphen = 0; // 1 if the console is one of the places from which to read input, 0 otherwise.
 
     int i;
-    // Stop iterating once the loop reaches the output file which is always last or when the three modifiers have been set already, therefore not needing to iterate any longer.
+    // Stop iterating once the loop reaches the output file which is always last.
     for (i = 1; i < argc - 1; ++i)
     {
         // If one of the input files is -, the user will be inputting fractals from the command line (possibly among other input methods).
@@ -61,7 +61,7 @@ int main(int argc, const char *argv[])
         else
         {
             ++number_files;
-			printf("%s \n", argv[i]);
+			// printf("%s \n", argv[i]);
         }
     }
 
@@ -83,25 +83,23 @@ int main(int argc, const char *argv[])
 		STACK_SIZE = number_files + 1;
 	}
 
-	STACK_SIZE = 20;
-
 	number_files -= has_hyphen;
 
-	printf("number_files : %d. \n", number_files);
+	// printf("number_files : %d. \n", number_files);
 
     char *files[number_files];
 
     int j = 0;
     for (i = 1; i < argc - 1 && j < number_files; ++i)
     {
-		printf("i : %d. \n", i);
+		// printf("i : %d. \n", i);
         // If the argument is not one of the options, it is an input file.
 		if (max_threads_position == 0)
 		{
 			if (i != d_position && i != hyphen_position)
 	        {
 	            files[j] = strdup(argv[i]);
-				printf("files[%d] : %s. \n", j, files[j]);
+				// printf("files[%d] : %s. \n", j, files[j]);
 				++j;
 	        }
 		}
@@ -110,7 +108,7 @@ int main(int argc, const char *argv[])
 			if (i != d_position && i != max_threads_position && i != max_threads_position + 1 && i != hyphen_position)
 	        {
 	            files[j] = strdup(argv[i]);
-				printf("files[%d] : %s. \n", j, files[j]);
+				// printf("files[%d] : %s. \n", j, files[j]);
 				++j;
 	        }
 		}
@@ -242,7 +240,7 @@ int main(int argc, const char *argv[])
 	if (d_position == 0)
 	{
 		printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(best_fractal));
-		int len = strlen(argv[argc - 1]) + 1;
+		size_t len = strlen(argv[argc - 1]) + 1;
 		char *temp = malloc((len + 5) * sizeof(char));
 		strncpy(temp, argv[argc - 1], len);
 		write_bitmap_sdl(best_fractal, strcat(temp, ".bmp"));
@@ -256,7 +254,7 @@ int main(int argc, const char *argv[])
 
 	for (i = 0; i < number_files; ++i)
 	{
-		printf("Freeing files[%d] .\n", i);
+		// printf("Freeing files[%d] .\n", i);
 		free(files[i]);
 	}
 

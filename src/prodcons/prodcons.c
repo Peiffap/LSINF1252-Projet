@@ -23,7 +23,7 @@ static double best_avg = 0.0;
  */
 void *read_file_input(void *file_name)
 {
-	char *file_name_str = file_name;
+	char *file_name_str = (char *) file_name;
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 	if (fractal_line == NULL)
 	{
@@ -31,7 +31,7 @@ void *read_file_input(void *file_name)
 	}
 
 	FILE *file = NULL;
-	printf("file_name_str : %s. \n", file_name_str);
+	// printf("file_name_str : %s. \n", file_name_str);
     file = fopen(file_name_str, "r"); // Opens the file specified by file_name with read permission.
     if (file == NULL)
     {
@@ -76,7 +76,7 @@ struct fractal *line_to_fractal(const char *line)
     int err = sscanf(line, "%s %d %d %lf %lf", name, &w, &h, &a, &b);
     // If the sscanf call is succesful, it should return five, since it should assign five values. If the number of assigned values isn't equal to five, a problem occured.
 
-	printf("In the scan || name : %s, w : %d, h : %d, a : %lf, b : %lf. \n", name, w, h, a, b);
+	// printf("In the scan || name : %s, w : %d, h : %d, a : %lf, b : %lf. \n", name, w, h, a, b);
 
     if (err != 5)
     {
@@ -117,9 +117,9 @@ void *compute_fractal(void *args)
 	    // If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
 	    if (d_position != 0)
 	    {
-			int len = 65;
+			size_t len = 65;
 			char *temp = malloc((len + 5) * sizeof(char));
-			printf("Currently computing %s. \n", fractal_get_name(fract));
+			// printf("Currently computing %s. \n", fractal_get_name(fract));
 			strncpy(temp, fractal_get_name(fract), len);
 	        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
 			free(temp);
@@ -138,9 +138,9 @@ void *compute_fractal(void *args)
 		    }
 			else
 			{
-				printf("The current fractal had a lower average. \n");
+				// printf("The current fractal had a lower average. \n");
 				fractal_free(fract);
-				printf("Fractal has been freed. \n");
+				// printf("Fractal has been freed. \n");
 			}
 		    pthread_mutex_unlock(&best_mutex);
 		}
