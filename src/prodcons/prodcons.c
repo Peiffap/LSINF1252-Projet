@@ -107,7 +107,7 @@ void *compute_fractal(void *args)
 	        for (j = 0; j < height; ++j)
 	        {
 	            fractal_compute_value(fract, i, j); // Computes the number of iterations for a given pixel of the fractal and stores this value in the values array of the fractal.
-				printf("x : %d || y : %d || val : %d. \n", i, j, fractal_get_value(fract, i, j));
+				// printf("x : %d || y : %d || val : %d. \n", i, j, fractal_get_value(fract, i, j));
 	            totalIterations += fractal_get_value(fract, i, j); // Sums up the total iterations using the number of iterations set in the previous line.
 	        }
 	    }
