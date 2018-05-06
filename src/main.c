@@ -240,9 +240,11 @@ int main(int argc, const char *argv[])
 	if (d_position == 0)
 	{
 		printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(best_fractal));
-		size_t len = strlen(argv[argc - 1]) + 1;
-		char *temp = malloc((len + 5) * sizeof(char));
-		strncpy(temp, argv[argc - 1], len);
+		size_t len = strlen(argv[argc - 1]);
+		char *temp = malloc((len + 1 + 5 + 9) * sizeof(char));
+		strncpy(temp, argv[argc - 1], len + 1);
+		prepend(temp, "outputs/");
+		// printf("%s \n", temp);
 		write_bitmap_sdl(best_fractal, strcat(temp, ".bmp"));
 		free(temp);
 		fractal_free(best_fractal);

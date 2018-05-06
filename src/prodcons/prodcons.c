@@ -89,6 +89,22 @@ struct fractal *line_to_fractal(const char *line)
 }
 
 /**
+ * Prepends t into s. Assumes s has enough space allocated.
+ */
+void prepend(char* s, const char* t)
+{
+	size_t len = strlen(t);
+	size_t i;
+
+	memmove(s + len, s, strlen(s) + 1);
+
+	for (i = 0; i < len; ++i)
+	{
+		s[i] = t[i];
+	}
+}
+
+/**
  * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
  */
 void *compute_fractal(void *args)
@@ -118,9 +134,11 @@ void *compute_fractal(void *args)
 	    if (d_position != 0)
 	    {
 			size_t len = 65;
-			char *temp = malloc((len + 5) * sizeof(char));
+			char *temp = malloc((len + 5 + 9) * sizeof(char));
 			// printf("Currently computing %s. \n", fractal_get_name(fract));
 			strncpy(temp, fractal_get_name(fract), len);
+			prepend(temp, "outputs/");
+			// printf("%s \n", temp);
 	        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
 			free(temp);
 	    }
