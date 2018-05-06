@@ -3,8 +3,6 @@
 
 extern struct fractal *best_fractal;
 extern pthread_mutex_t best_mutex;
-extern int d_position;
-extern int hyphen_position;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
@@ -26,10 +24,5 @@ struct fractal *line_to_fractal(const char *line);
  * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
  */
 void *compute_fractal();
-
-/**
- * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
- */
-void *read_console_input();
 
 #endif

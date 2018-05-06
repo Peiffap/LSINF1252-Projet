@@ -5,8 +5,8 @@ struct fractal {
     char *the_name;
     int the_width;
     int the_height;
-    int the_a;
-    int the_b;
+    double the_a;
+    double the_b;
     int **values;
 };
 

@@ -4,6 +4,5 @@
 #define LINE_LENGTH 256
 
 extern int d_position;
-extern int hyphen_position;
 
 #endif

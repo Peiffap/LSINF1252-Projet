@@ -14,7 +14,6 @@
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
 struct fractal *best_fractal = NULL; // Fractal with highest average number of iterations.
 int d_position;
-int hyphen_position;
 static double best_avg = 0.0;
 
 /**
@@ -76,8 +75,11 @@ struct fractal *line_to_fractal(const char *line)
     int err = sscanf(line, "%s %d %d %lf %lf", name, &w, &h, &a, &b);
     // If the sscanf call is succesful, it should return five, since it should assign five values. If the number of assigned values isn't equal to five, a problem occured.
 
+	printf("In the scan || name : %s, w : %d, h : %d, a : %lf, b : %lf. \n", name, w, h, a, b);
+
     if (err != 5)
     {
+		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
     struct fractal *f = fractal_new(name, w, h, a, b);
@@ -134,51 +136,11 @@ void *compute_fractal(void *args)
 		    }
 			else
 			{
+				printf("The current fractal had a lower average. \n");
 				fractal_free(fract);
+				printf("Fractal has been freed. \n");
 			}
 		    pthread_mutex_unlock(&best_mutex);
 		}
 	}
-}
-
-/**
- * Producer function that reads input from the console, line per line, and stores the results in a stack where the fractals become accessible to the consumer threads.
- */
-void *read_console_input()
-{
-    char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-	size_t len;
-
-    int has_next = 0; // Determines whether the user is gonna enter another fractal.
-
-	int read = -1; // Determines if getline was succesful.
-
-    // As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
-    while (has_next == 0)
-    {
-        // Ask user to enter a fractal and store the result in fractal_line.
-        printf("Please enter a fractal under the following format : name height width a b. \n");
-        int read = getline(&fractal_line, &len, stdin);
-
-		if (read == -1)
-		{
-			printf("Error with getline in read_console_input. \n");
-			free(fractal_line);
-			break;
-		}
-
-        push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
-
-        // Asks the user if they want to keep entering fractals.
-        printf("Enter 0 if you wish to continue entering fractals. Otherwise, enter 1. \n");
-		read = getline(&fractal_line, &len, stdin);
-		if (read == -1)
-		{
-			printf("Error with getline in read_console_input. \n");
-			free(fractal_line);
-			break;
-		}
-        has_next = (int) strtol(fractal_line, (char **) NULL, 10);
-    }
-	free(fractal_line);
 }
