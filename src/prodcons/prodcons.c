@@ -16,14 +16,20 @@ struct fractal *best_fractal = NULL; // Fractal with highest average number of i
 int d_position;
 static double best_avg = 0.0;
 
+static checkList *head = NULL;
+
+
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
  *
  * @param file_name a string containing the name of the file where the fractal is stored.
  */
+
+
 void *read_file_input(void *file_name)
 {
 	char *file_name_str = (char *) file_name;
+    
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 	if (fractal_line == NULL)
 	{
@@ -45,7 +51,10 @@ void *read_file_input(void *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+                struct fractal *new_fractal=line_to_fractal(fractal_line);
+                if (new_fractal != NULL){
+                    push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+                }
             }
         }
         fclose(file); // Closes the file after reading it.
@@ -83,6 +92,19 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
+    
+    struct checkList *run = head;
+    while(run!=NULL){
+        if(strcmp(run->val, name)==0){
+            return NULL;
+        }
+        run = run -> next;
+    }
+    struct checkList *new_name = malloc(sizeof(struct checkList));
+    new_name->val = name;
+    new_name->next=head;
+    head=new_name;
+    
     struct fractal *f = fractal_new(name, w, h, a, b);
     free(name);
     return f;

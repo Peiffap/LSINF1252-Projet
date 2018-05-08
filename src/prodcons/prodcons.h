@@ -4,6 +4,11 @@
 extern struct fractal *best_fractal;
 extern pthread_mutex_t best_mutex;
 
+typedef struct checkList{
+    char *val;
+    struct checkList *next;
+}checkList;
+
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
  *
