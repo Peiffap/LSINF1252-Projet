@@ -53,10 +53,10 @@ void *read_file_input(void *file_name)
             {
                 struct fractal *new_fractal=line_to_fractal(fractal_line);
                 if (new_fractal != NULL){
-                    push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+                    push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
                 }
             }
-        }
+        }o
         fclose(file); // Closes the file after reading it.
     }
 	free(fractal_line);
@@ -92,14 +92,16 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
-    
+    //on parcours la liste pour vérifier si c'est une nouvelle fractal ou un duplicat
     struct checkList *run = head;
     while(run!=NULL){
+        //revoie 0 si la fractal existe déjà
         if(strcmp(run->val, name)==0){
             return NULL;
         }
         run = run -> next;
     }
+    //ajout le nom de la fractal dans la liste
     struct checkList *new_name = malloc(sizeof(struct checkList));
     new_name->val = name;
     new_name->next=head;
