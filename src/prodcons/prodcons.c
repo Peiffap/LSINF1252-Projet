@@ -52,10 +52,7 @@ void *read_file_input(void *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                struct fractal *new_fractal = line_to_fractal(fractal_line);
-                if (new_fractal != NULL){
-                    push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
-                }
+                push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
             }
         }
         fclose(file); // Closes the file after reading it.
@@ -93,29 +90,34 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
-    // Iterate over list to see if the fractal already exists.
     
     pthread_mutex_lock(&duplicate);
-    
+    // Iterate over list to see if the fractal already exists
     struct check_list *run = head;
-    printf("value before check %s. \n", name);
     while (run != NULL)
 	{
         // Returns 0 if the fractal already exists.
         if (strcmp(run->val, name) == 0)
 		{
-			printf("match. \n", run->val);
 			pthread_mutex_unlock(&duplicate);
-            return NULL;
+			free(name);
+			return NULL;
         }
         run = run->next;
     }
+
     // Add the fractal to the list.
     struct check_list *new_name = malloc(sizeof(struct check_list));
+	if (new_name == NULL)
+	{
+		printf("Error with malloc in check_list add. \n");
+		return NULL;
+	}
+	
     new_name->val = name;
     new_name->next = head;
     head = new_name;
-    printf("value after check %s. \n", head->val);
+    
     pthread_mutex_unlock(&duplicate);
 
     struct fractal *f = fractal_new(name, w, h, a, b);
@@ -177,7 +179,6 @@ void *compute_fractal(void *p)
 			// printf("%s \n", temp);
 	        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
 			free(temp);
-			free(path);
 	    }
 		else
 		{

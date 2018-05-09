@@ -191,7 +191,7 @@ int main(int argc, const char *argv[])
 			hyphen_position = 0;
 		}
 
-		printf("This was the entry : %s", fractal_line);
+		// printf("This was the entry : %s", fractal_line);
 
         push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
 

@@ -17,6 +17,11 @@ typedef struct check_list {
 void *read_file_input(void *file_name);
 
 /**
+ * Prepends t into s. Assumes s has enough space allocated.
+ */
+void prepend(char* s, const char* t);
+
+/**
  * This function takes a string describing a fractal as input and returns the fractal described by that line.
  *
  * @param line is a string describing a fractal. The order in which the fractal's attributes should be is name-height-width-a-b, where the hyphens should be replaced by regular spaces.
