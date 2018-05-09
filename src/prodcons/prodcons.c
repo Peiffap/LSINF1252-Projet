@@ -16,7 +16,7 @@ struct fractal *best_fractal = NULL; // Fractal with highest average number of i
 int d_position;
 static double best_avg = 0.0;
 
-static checkList *head = NULL;
+static check_list *head = NULL;
 
 
 /**
@@ -29,7 +29,7 @@ static checkList *head = NULL;
 void *read_file_input(void *file_name)
 {
 	char *file_name_str = (char *) file_name;
-    
+
     char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
 	if (fractal_line == NULL)
 	{
@@ -51,12 +51,12 @@ void *read_file_input(void *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                struct fractal *new_fractal=line_to_fractal(fractal_line);
+                struct fractal *new_fractal = line_to_fractal(fractal_line);
                 if (new_fractal != NULL){
                     push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
                 }
             }
-        }o
+        }
         fclose(file); // Closes the file after reading it.
     }
 	free(fractal_line);
@@ -92,21 +92,23 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
-    //on parcours la liste pour vérifier si c'est une nouvelle fractal ou un duplicat
-    struct checkList *run = head;
-    while(run!=NULL){
-        //revoie 0 si la fractal existe déjà
-        if(strcmp(run->val, name)==0){
+    // Iterate over list to see if the fractal already exists.
+    struct check_list *run = head;
+    while (run != NULL)
+	{
+        // Returns 0 if the fractal already exists.
+        if (strcmp(run->val, name) == 0)
+		{
             return NULL;
         }
-        run = run -> next;
+        run = run->next;
     }
-    //ajout le nom de la fractal dans la liste
-    struct checkList *new_name = malloc(sizeof(struct checkList));
+    // Add the fractal to the list.
+    struct check_list *new_name = malloc(sizeof(struct check_list));
     new_name->val = name;
-    new_name->next=head;
-    head=new_name;
-    
+    new_name->next = head;
+    head = new_name;
+
     struct fractal *f = fractal_new(name, w, h, a, b);
     free(name);
     return f;
@@ -131,8 +133,9 @@ void prepend(char* s, const char* t)
 /**
  * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
  */
-void *compute_fractal(void *args)
+void *compute_fractal(void *p)
 {
+	char *path = p;
 	while (1)
 	{
 	    struct fractal *fract = pop();
@@ -158,13 +161,15 @@ void *compute_fractal(void *args)
 	    if (d_position != 0)
 	    {
 			size_t len = 65;
-			char *temp = malloc((len + 5 + 9) * sizeof(char));
+			char *temp = malloc((len + 5 + 9 + strlen(path)) * sizeof(char));
 			// printf("Currently computing %s. \n", fractal_get_name(fract));
 			strncpy(temp, fractal_get_name(fract), len);
 			prepend(temp, "outputs/");
+			prepend(temp, path);
 			// printf("%s \n", temp);
 	        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
 			free(temp);
+			free(path);
 	    }
 		else
 		{

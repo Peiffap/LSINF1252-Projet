@@ -22,6 +22,10 @@ int main(int argc, const char *argv[])
 
 	int has_hyphen = 0; // 1 if the console is one of the places from which to read input, 0 otherwise.
 
+	size_t lenbis = strlen(argv[0]) - 6;
+	char *path = malloc(lenbis * sizeof(char));
+	strncpy(path, argv[0], lenbis);
+
     int i;
     // Stop iterating once the loop reaches the output file which is always last.
     for (i = 1; i < argc - 1; ++i)
@@ -157,7 +161,7 @@ int main(int argc, const char *argv[])
     // Creating consumer threads.
     for (i = 0; i < max_threads; ++i)
 	{
-        error = pthread_create(&(consumer_threads[i]), NULL, &compute_fractal, NULL);
+        error = pthread_create(&(consumer_threads[i]), NULL, &compute_fractal, (void *) path);
         if (error != 0)
 		{
             perror("pthread_create");
@@ -241,14 +245,17 @@ int main(int argc, const char *argv[])
 	{
 		printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(best_fractal));
 		size_t len = strlen(argv[argc - 1]);
-		char *temp = malloc((len + 1 + 5 + 9) * sizeof(char));
+		char *temp = malloc((len + 1 + 5 + 9 + lenbis) * sizeof(char));
 		strncpy(temp, argv[argc - 1], len + 1);
 		prepend(temp, "outputs/");
-		// printf("%s \n", temp);
+		prepend(temp, path);
+		printf("%s \n", temp);
 		write_bitmap_sdl(best_fractal, strcat(temp, ".bmp"));
 		free(temp);
 		fractal_free(best_fractal);
 	}
+
+	free(path);
 
 	destroy();
 	pthread_mutex_destroy(&best_mutex);
