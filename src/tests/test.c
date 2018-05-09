@@ -20,7 +20,6 @@ void get_name(void)
 	fractal_free(f);
 }
 
-
 /**
  * Tests whether a fractal has the right width and height after initialising it.
  */
@@ -36,8 +35,6 @@ void get_width_and_height(void)
 	CU_ASSERT_EQUAL(fractal_get_height(f), height);
 	fractal_free(f);
 }
-
-
 
 /**
  * Tests whether a fractal has the right values after setting and getting them.
@@ -72,6 +69,9 @@ void get_a(void) {
 	fractal_free(f);
 }
 
+/**
+ * Tests whether the b value is retrieved correctly.
+ */
 void get_b(void)
 {
 	const char *name = "get_b";
