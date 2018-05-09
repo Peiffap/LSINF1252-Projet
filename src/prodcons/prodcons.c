@@ -107,7 +107,7 @@ struct fractal *line_to_fractal(const char *line)
     new_name->val = name;
     new_name->next = head;
     head = new_name;
-    printf("name after check %s. \n", head->val);
+    // printf("Mame after check %s. \n", head->val);
 
     struct fractal *f = fractal_new(name, w, h, a, b);
     return f;
