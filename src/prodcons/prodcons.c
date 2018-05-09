@@ -51,10 +51,7 @@ void *read_file_input(void *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                struct fractal *new_fractal = line_to_fractal(fractal_line);
-                if (new_fractal != NULL){
-                    push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
-                }
+                push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
             }
         }
         fclose(file); // Closes the file after reading it.
@@ -93,25 +90,45 @@ struct fractal *line_to_fractal(const char *line)
         return NULL;
     }
     // Iterate over list to see if the fractal already exists.
-    struct check_list *run = head;
-    while (run != NULL)
+	printf("Name read from input : %s. \n", name);
+    if (contains(name) == 0)
 	{
-        // Returns 0 if the fractal already exists.
-        if (strcmp(run->val, name) == 0)
-		{
-            return NULL;
-        }
-        run = run->next;
-    }
+		return NULL;
+	}
+
     // Add the fractal to the list.
     struct check_list *new_name = malloc(sizeof(struct check_list));
+	if (new_name == NULL)
+	{
+		printf("Error with malloc in check_list add. \n");
+		return NULL;
+	}
+	// printf("Adding %s. \n", name);
     new_name->val = name;
     new_name->next = head;
     head = new_name;
 
     struct fractal *f = fractal_new(name, w, h, a, b);
-    free(name);
     return f;
+}
+
+/**
+ * Checks if a certain name has already been used.
+ */
+int contains(char *str)
+{
+	struct check_list *run = head;
+    while (run != NULL)
+	{
+		printf("Name read in contains : %s. \n", run->val);
+        // Returns 0 if the fractal already exists.
+        if (strcmp(run->val, str) == 0)
+		{
+			return 0;
+        }
+        run = run->next;
+    }
+	return 1;
 }
 
 /**
