@@ -14,17 +14,16 @@ fractstack.o: fractstack/fractstack.c
 prodcons.o: prodcons/prodcons.c
 	gcc -Wall -g -O0 -c prodcons/prodcons.c -lpthread
 
-#test:
-#	cd libfractal && make
-#	cd Test && make
-#	make clean
+test:
+	cd libfractal && make
+	cd tests && make
+	make clean
 
 lib:
 	cd libfractal && make
 	make clean
 
-# Still need to add Test/*.o between libfractal/*.o and fractstack/*.o
 clean:
-	rm -rf *.o libfractal/*.o libfractal/*.a fractstack/*.o prodcons/*.o
+	rm -rf *.o libfractal/*.o libfractal/*.a tests/*.o fractstack/*.o prodcons/*.o
 
 .SILENT:
