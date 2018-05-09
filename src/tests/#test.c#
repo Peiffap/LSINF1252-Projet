@@ -17,26 +17,22 @@ void getName(void)
 	double b = 0.156;
 	struct fractal *f = fractal_new(name, width, height, a, b);
 	CU_ASSERT_STRING_EQUAL(fractal_get_name(f), name);
-	fractal_free(f);
-}
-
-
-/**
- * Tests whether a fractal has the right width and height after initialising it.
- */
-void getWidthAndHeight(void)
-{
-	const char *name = "testWidthAndHeight";
-	int width = 900;
-	int height = 900;
-	double a = 0.8;
-	double b = 0.1;
-	struct fractal *f = fractal_new(name, width, height, a, b);
-	CU_ASSERT_EQUAL(fractal_get_width(f), width);
-	CU_ASSERT_EQUAL(fractal_get_height(f), height);
-	fractal_free(f);
-}
-
+/* /\* /\\* /\\\* 	fractal_free(f); *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\* } *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\* /\\\\** *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*  *Tests whether  fractal has the right parameter width, height *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*  *\\\\/ *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\* void getWidthAndHeight(void){ *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   const char *name = "testWidthHeight"; *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   int width = 900; *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   int width = 800; *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   double a = 0.8; *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   double b = 0.67; *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   struct fractal *f = fractal_new(name, width, height, a, b); *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   CU_ASSERT_EQUAL(fractal_get_width(f), width); *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   CU_ASSERT_EQUAL(fractal_get_height(f), height); *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\*   fractal_free(f); *\\\/ *\\/ *\/ */
+/* /\* /\\* /\\\* } */ */ */ */
 
 
 /**
@@ -76,8 +72,8 @@ int main(int argc, const char *argv[]) {
 
 	// Add to Suite.
 	if (NULL == CU_add_test(pSuite, "GetName", getName) ||
-	   NULL == CU_add_test(pSuite, "SetAndGetValue", setAndGetValue) ||
-	   NULL == CU_add_test(pSuite, "GetWidthAndHeight", getWidthAndHeight))
+	   NULL == CU_add_test(pSuite, "SetAndGetValue", setAndGetValue)
+	    NULL == CU_add_test(pSuite, "GetWidthAndHeight", getWidthAndHeigh))
 	   {
 		CU_cleanup_registry();
 		return CU_get_error();
