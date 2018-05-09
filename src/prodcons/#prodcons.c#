@@ -93,7 +93,6 @@ struct fractal *line_to_fractal(const char *line)
         return NULL;
     }
     // Iterate over list to see if the fractal already exists.
-    printf("name before check %s .\n", name);
     struct check_list *run = head;
     while (run != NULL)
 	{
@@ -109,7 +108,6 @@ struct fractal *line_to_fractal(const char *line)
     new_name->val = name;
     new_name->next = head;
     head = new_name;
-    printf("name after check %s. \n", head->val);
 
     struct fractal *f = fractal_new(name, w, h, a, b);
     return f;
