@@ -17,11 +17,6 @@ typedef struct check_list {
 void *read_file_input(void *file_name);
 
 /**
- * Checks if a certain name has already been used.
- */
-int contains(char *str);
-
-/**
  * Prepends t into s. Assumes s has enough space allocated.
  */
 void prepend(char* s, const char* t);

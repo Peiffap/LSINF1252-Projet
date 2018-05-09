@@ -91,10 +91,18 @@ struct fractal *line_to_fractal(const char *line)
     }
     // Iterate over list to see if the fractal already exists.
 	// printf("Name read from input : %s. \n", name);
-    if (contains(name) == 0)
+	struct check_list *run = head;
+    while (run != NULL)
 	{
-		return NULL;
-	}
+		// printf("Name read in contains : %s. \n", run->val);
+        // Returns 0 if the fractal already exists.
+        if (strcmp(run->val, name) == 0)
+		{
+			free(name);
+			return NULL;
+        }
+        run = run->next;
+    }
 
     // Add the fractal to the list.
     struct check_list *new_name = malloc(sizeof(struct check_list));
@@ -111,25 +119,6 @@ struct fractal *line_to_fractal(const char *line)
 
     struct fractal *f = fractal_new(name, w, h, a, b);
     return f;
-}
-
-/**
- * Checks if a certain name has already been used.
- */
-int contains(char *str)
-{
-	struct check_list *run = head;
-    while (run != NULL)
-	{
-		printf("Name read in contains : %s. \n", run->val);
-        // Returns 0 if the fractal already exists.
-        if (strcmp(run->val, str) == 0)
-		{
-			return 0;
-        }
-        run = run->next;
-    }
-	return 1;
 }
 
 /**
@@ -187,7 +176,6 @@ void *compute_fractal(void *p)
 			// printf("%s \n", temp);
 	        write_bitmap_sdl(fract, strcat(temp, ".bmp"));
 			free(temp);
-			free(path);
 	    }
 		else
 		{
