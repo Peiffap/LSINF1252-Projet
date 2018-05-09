@@ -12,6 +12,7 @@
 #include "../main.h"
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
+pthread_mutex_t duplicate; // Mutex to control access to the linked list "check_list
 struct fractal *best_fractal = NULL; // Fractal with highest average number of iterations.
 int d_position;
 static double best_avg = 0.0;
@@ -93,13 +94,18 @@ struct fractal *line_to_fractal(const char *line)
         return NULL;
     }
     // Iterate over list to see if the fractal already exists.
-    printf("name before check %s .\n", name);
+    
+    pthread_mutex_lock(&duplicate);
+    
     struct check_list *run = head;
+    printf("value before check %s. \n", name);
     while (run != NULL)
 	{
         // Returns 0 if the fractal already exists.
         if (strcmp(run->val, name) == 0)
 		{
+			printf("match. \n", run->val);
+			pthread_mutex_unlock(&duplicate);
             return NULL;
         }
         run = run->next;
@@ -109,7 +115,8 @@ struct fractal *line_to_fractal(const char *line)
     new_name->val = name;
     new_name->next = head;
     head = new_name;
-    printf("name after check %s. \n", head->val);
+    printf("value after check %s. \n", head->val);
+    pthread_mutex_unlock(&duplicate);
 
     struct fractal *f = fractal_new(name, w, h, a, b);
     return f;
@@ -177,7 +184,7 @@ void *compute_fractal(void *p)
 		    pthread_mutex_lock(&best_mutex);
 
 		    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
-		    if (avg > best_avg)
+		    if (avg >= best_avg)
 		    {
 				printf("A fractal with a higher average (%f > %f) has been found. \n", avg, best_avg);
 				free(best_fractal);

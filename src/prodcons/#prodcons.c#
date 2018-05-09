@@ -175,12 +175,12 @@ void *compute_fractal(void *p)
 		    pthread_mutex_lock(&best_mutex);
 
 		    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
-		    if (avg > best_avg)
+		    if (avg >= best_avg)
 		    {
 				printf("A fractal with a higher average (%f > %f) has been found. \n", avg, best_avg);
 				free(best_fractal);
 				best_avg = avg;
-		        best_fractal = fract;
+				best_fractal = fract;
 		    }
 			else
 			{
