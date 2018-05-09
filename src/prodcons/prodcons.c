@@ -52,7 +52,10 @@ void *read_file_input(void *file_name)
             // If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
-                push(line_to_fractal(fractal_line)); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+				struct fractal *new_fractal = line_to_fractal(fractal_line);
+				if(new_fractal!=NULL){
+					push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
+				}
             }
         }
         fclose(file); // Closes the file after reading it.
@@ -99,8 +102,8 @@ struct fractal *line_to_fractal(const char *line)
         // Returns 0 if the fractal already exists.
         if (strcmp(run->val, name) == 0)
 		{
-			pthread_mutex_unlock(&duplicate);
 			free(name);
+			pthread_mutex_unlock(&duplicate);
 			return NULL;
         }
         run = run->next;
