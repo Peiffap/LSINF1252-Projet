@@ -13,11 +13,12 @@
 
 pthread_mutex_t best_mutex; // Mutex to control access to the best fractal value.
 pthread_mutex_t duplicate; // Mutex to control access to the linked list "check_list
-struct fractal *best_fractal = NULL; // Fractal with highest average number of iterations.
+//struct fractal *best_fractal = NULL; // Fractal with highest average number of iterations.
 int d_position;
 static double best_avg = 0.0;
 
-static check_list *head = NULL;
+static check_list *headDucplicate = NULL;
+struct best_fractal *headBestFractal = NULL;
 
 
 /**
@@ -96,7 +97,7 @@ struct fractal *line_to_fractal(const char *line)
     
     pthread_mutex_lock(&duplicate);
     // Iterate over list to see if the fractal already exists
-    struct check_list *run = head;
+    struct check_list *run = headDucplicate;
     while (run != NULL)
 	{
         // Returns 0 if the fractal already exists.
@@ -118,8 +119,8 @@ struct fractal *line_to_fractal(const char *line)
 	}
 	
     new_name->val = name;
-    new_name->next = head;
-    head = new_name;
+    new_name->next = headDucplicate;
+    headDucplicate = new_name;
     
     pthread_mutex_unlock(&duplicate);
 
@@ -142,6 +143,9 @@ void prepend(char* s, const char* t)
 		s[i] = t[i];
 	}
 }
+
+
+
 
 /**
  * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
@@ -188,12 +192,37 @@ void *compute_fractal(void *p)
 		    pthread_mutex_lock(&best_mutex);
 
 		    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
-		    if (avg >= best_avg)
+		    if(avg >= best_avg)
 		    {
-				printf("A fractal with a higher average (%f > %f) has been found. \n", avg, best_avg);
-				free(best_fractal);
+				printf("A fractal with a higher/equal average (%f >= %f) has been found. \n", avg, best_avg);
+				
+				if(avg != best_avg)
+				{
+						struct best_fractal* tmp;
+
+						while (headBestFractal != NULL)
+						{
+							tmp = headBestFractal;
+							headBestFractal = headBestFractal->next;
+							fractal_free(tmp->f);
+							free(tmp);
+						}
+				}
+				
 				best_avg = avg;
-		        best_fractal = fract;
+				best_fractal *new_node = malloc(sizeof(struct best_fractal));
+
+				if (new_node == NULL)
+				{
+					printf("Error with malloc in pushBestFractal. \n");
+				}
+
+				new_node->f = fract;
+	
+				new_node->next = headBestFractal;
+				headBestFractal = new_node;
+				
+		        //best_fractal = fract;
 		    }
 			else
 			{

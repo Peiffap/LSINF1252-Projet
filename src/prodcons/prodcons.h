@@ -1,13 +1,22 @@
 #ifndef _PRODCONS_H
 #define _PRODCONS_H
-
-extern struct fractal *best_fractal;
 extern pthread_mutex_t best_mutex;
 
+// check_list is used to represent the stack containing the fractal's name to avoid duplicates.
 typedef struct check_list {
     char *val;
     struct check_list *next;
 } check_list;
+
+
+// check_list is used to represent the stack containing the fractal's name to avoid duplicates.
+typedef struct best_fractal {
+    struct fractal *f;
+    struct best_fractal *next;
+} best_fractal;
+
+
+extern best_fractal *headBestFractal;
 
 /**
  * Producer function that reads input from a file, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
