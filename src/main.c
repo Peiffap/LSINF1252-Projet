@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -251,22 +252,25 @@ int main(int argc, const char *argv[])
 		
 		printf("Run value %s. \n", fractal_get_name(run->f));
 
-		while (run != NULL)
+		while (headBestFractal != NULL)
 		{
 			
-			size_t len = strlen(fractal_get_name(run->f));
+			size_t len = strlen(fractal_get_name(headBestFractal->f));
 			char *temp = malloc((len + 1 + 5 + 9 + lenbis) * sizeof(char));
-			strncpy(temp, fractal_get_name(run->f), len + 1);
+			strncpy(temp, fractal_get_name(headBestFractal->f), len + 1);
 			prepend(temp, "outputs/");
 			prepend(temp, path);
 			printf("%s \n", temp);
 			
 			
-			printf("The fractal value %s. \n", fractal_get_name(run->f));
+			printf("The fractal value %s. \n", fractal_get_name(headBestFractal->f));
 			
-			write_bitmap_sdl(run->f, strcat(temp, ".bmp"));
-			printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(run->f));
-			run = run->next;
+			write_bitmap_sdl(headBestFractal->f, strcat(temp, ".bmp"));
+			printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(headBestFractal->f));
+			run = headBestFractal;
+			headBestFractal=headBestFractal->next;
+			free(run->f);
+			free(run);
 			free(temp);
 		}
 		pthread_mutex_unlock(&best_fractValue);
