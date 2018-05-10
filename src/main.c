@@ -175,44 +175,8 @@ int main(int argc, const char *argv[])
 		}
     }
 
-	char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
-
-	int tmp = hyphen_position;
 	// If the console input option was activated, read input from the console. As long as the user wants to keep entering fractals through standard input, the thread reading from the console keeps waiting for input.
-	while (hyphen_position)
-	{
-		// Ask user to enter a fractal and store the result in fractal_line.
-        printf("Please enter a fractal under the following format : name height width a b. \n");
-
-		size_t len;
-
-		int read = getline(&fractal_line, &len, stdin);
-
-		if (read == -1)
-		{
-			printf("Error with getline in read_console_input. \n");
-			hyphen_position = 0;
-		}
-
-		// printf("This was the entry : %s", fractal_line);
-
-        push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
-
-        // Asks the user if they want to keep entering fractals.
-        printf("Enter 1 if you wish to stop entering fractals, just hit enter if you wish to keep going. \n");
-		read = getline(&fractal_line, &len, stdin);
-		if (read == -1)
-		{
-			printf("Error with getline in read_console_input. \n");
-			hyphen_position = 0;
-		}
-        if (strtol(fractal_line, (char **) NULL, 10) == 1)
-		{
-			hyphen_position = 0;
-		}
-	}
-	free(fractal_line);
-	hyphen_position = tmp;
+	read_console_input(hyphen_position);
 
     // Join producer threads.
     for (i = 0; i < number_files; ++i)

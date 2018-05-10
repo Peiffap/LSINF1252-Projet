@@ -26,6 +26,13 @@ extern best_fractal *headBestFractal;
 void *read_file_input(void *file_name);
 
 /**
+ * Producer function that reads input from the console, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
+ *
+ * @param hyphen_position an integer determining whether to read input from the console or not.
+ */
+void read_console_input(int hyphen_position);
+
+/**
  * Prepends t into s. Assumes s has enough space allocated.
  */
 void prepend(char* s, const char* t);

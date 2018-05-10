@@ -26,8 +26,6 @@ struct best_fractal *headBestFractal = NULL;
  *
  * @param file_name a string containing the name of the file where the fractal is stored.
  */
-
-
 void *read_file_input(void *file_name)
 {
 	char *file_name_str = (char *) file_name;
@@ -65,6 +63,50 @@ void *read_file_input(void *file_name)
     pthread_exit(NULL);
 }
 
+/**
+ * Producer function that reads input from the console, line per line. Lines starting with either a newline character, an octothorpe or a space are ignored.
+ *
+ * @param hyphen_position an integer determining whether to read input from the console or not.
+ */
+void read_console_input(int hyphen_position)
+{
+	char *fractal_line = malloc((LINE_LENGTH + 1) * sizeof(char)); // This variable stores a line the user typed in, and describes a fractal. The length is defined so that the maximal input lengths for the different fractal parameters are accepted.
+
+	while (hyphen_position)
+	{
+		// Ask user to enter a fractal and store the result in fractal_line.
+		printf("Please enter a fractal under the following format : name height width a b. \n");
+
+		size_t len;
+
+		int read = getline(&fractal_line, &len, stdin);
+
+		if (read == -1)
+		{
+			printf("Error with getline in read_console_input. \n");
+			hyphen_position = 0;
+		}
+
+		// printf("This was the entry : %s", fractal_line);
+
+		push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
+
+		// Asks the user if they want to keep entering fractals.
+		printf("Enter 1 if you wish to stop entering fractals, just hit enter if you wish to keep going. \n");
+		read = getline(&fractal_line, &len, stdin);
+		if (read == -1)
+		{
+			printf("Error with getline in read_console_input. \n");
+			hyphen_position = 0;
+		}
+		if (strtol(fractal_line, (char **) NULL, 10) == 1)
+		{
+			hyphen_position = 0;
+		}
+	}
+	free(fractal_line);
+}
+
 
 /**
  * This function takes a string describing a fractal as input and returns the fractal described by that line.
@@ -94,7 +136,7 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error in sscanf in line_to_fractal. \n");
         return NULL;
     }
-    
+
     pthread_mutex_lock(&duplicate);
     // Iterate over list to see if the fractal already exists
     struct check_list *run = headDucplicate;
@@ -117,11 +159,11 @@ struct fractal *line_to_fractal(const char *line)
 		printf("Error with malloc in check_list add. \n");
 		return NULL;
 	}
-	
+
     new_name->val = name;
     new_name->next = headDucplicate;
     headDucplicate = new_name;
-    
+
     pthread_mutex_unlock(&duplicate);
 
     struct fractal *f = fractal_new(name, w, h, a, b);
@@ -218,7 +260,7 @@ void *compute_fractal(void *p)
 				}
 
 				new_node->f = fract;
-	
+
 				new_node->next = headBestFractal;
 				headBestFractal = new_node;
 		    }
