@@ -191,11 +191,11 @@ void *compute_fractal(void *p)
 		{
 		    pthread_mutex_lock(&best_mutex);
 
-		    // If this fractal has a higher average than the current high score, then this fractal should become the new record holder.
+		    // If this fractal has a higher or equal average than the current high score, then this fractal should become the new record holder.
 		    if(avg >= best_avg)
 		    {
 				printf("A fractal with a higher/equal average (%f >= %f) has been found. \n", avg, best_avg);
-				
+				//If this fractal has a higher average, free stack
 				if(avg != best_avg)
 				{
 						struct best_fractal* tmp;
@@ -208,7 +208,7 @@ void *compute_fractal(void *p)
 							free(tmp);
 						}
 				}
-				
+				//push new best fractal in the stack
 				best_avg = avg;
 				best_fractal *new_node = malloc(sizeof(struct best_fractal));
 
@@ -221,14 +221,10 @@ void *compute_fractal(void *p)
 	
 				new_node->next = headBestFractal;
 				headBestFractal = new_node;
-				
-		        //best_fractal = fract;
 		    }
 			else
 			{
-				// printf("The current fractal had a lower average. \n");
 				fractal_free(fract);
-				// printf("Fractal has been freed. \n");
 			}
 		    pthread_mutex_unlock(&best_mutex);
 		}
