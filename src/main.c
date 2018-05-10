@@ -245,14 +245,6 @@ int main(int argc, const char *argv[])
 	// If the [-d] option wasn't selected, the only the best fractal needs to be converted into a bmp file.
 	if (d_position == 0)
 	{
-		
-		size_t len = strlen(argv[argc - 1]);
-		char *temp = malloc((len + 1 + 5 + 9 + lenbis) * sizeof(char));
-		strncpy(temp, argv[argc - 1], len + 1);
-		prepend(temp, "outputs/");
-		prepend(temp, path);
-		printf("%s \n", temp);
-		
 		//print the best fractals
 		pthread_mutex_lock(&best_fractValue);
 		best_fractal *run=headBestFractal;
@@ -262,9 +254,20 @@ int main(int argc, const char *argv[])
 		while (run != NULL)
 		{
 			
+			size_t len = strlen(fractal_get_name(run->f));
+			char *temp = malloc((len + 1 + 5 + 9 + lenbis) * sizeof(char));
+			strncpy(temp, fractal_get_name(run->f), len + 1);
+			prepend(temp, "outputs/");
+			prepend(temp, path);
+			printf("%s \n", temp);
+			
+			
+			printf("The fractal value %s. \n", fractal_get_name(run->f));
+			
 			write_bitmap_sdl(run->f, strcat(temp, ".bmp"));
 			printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(run->f));
 			run = run->next;
+			free(temp);
 		}
 		pthread_mutex_unlock(&best_fractValue);
 	}
