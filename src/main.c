@@ -212,7 +212,7 @@ int main(int argc, const char *argv[])
 	{
 		// Print all best fractals "fractal_name.bmp" in outputs.
 		pthread_mutex_lock(&best_fractValue);
-		best_fractal *run=headBestFractal;
+		best_fractal *run = headBestFractal;
 
 		printf("Run value %s. \n", fractal_get_name(run->f));
 

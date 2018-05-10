@@ -52,7 +52,7 @@ void *read_file_input(void *file_name)
             if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
             {
 				struct fractal *new_fractal = line_to_fractal(fractal_line);
-				if(new_fractal!=NULL){
+				if(new_fractal != NULL){
 					push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
 				}
             }
@@ -88,8 +88,11 @@ void read_console_input(int hyphen_position)
 		}
 
 		// printf("This was the entry : %s", fractal_line);
-
-		push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
+		// If the line doesn't start with a newline character, a space or an octothorpe, it describes a fractal and should be read accordingly.
+		if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
+		{
+			push(line_to_fractal(fractal_line)); // Adds the newly read fractal to the stack.
+		}
 
 		// Asks the user if they want to keep entering fractals.
 		printf("Enter 1 if you wish to stop entering fractals, just hit enter if you wish to keep going. \n");
