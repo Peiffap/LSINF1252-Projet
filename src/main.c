@@ -12,16 +12,14 @@
 
 int main(int argc, const char *argv[])
 {
-	pthread_mutex_t best_fractValue; // Mutex to control access to the best fractal value.
-
 	int max_threads_position = 0; // Determines whether the user has set a maximum number of threads to be used for computing the value of the fractals.
 	int hyphen_position = 0; // Determines whether the user is gonna enter fractals from the command line.
 
 	int STACK_SIZE = 20; // Default value for the number of places in the buffer.
 
-    int max_threads = 7; // Test to find optimal number of threads.
+    	int max_threads = 7; // Test to find optimal number of threads.
 
-    int number_files = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
+    	int number_files = 0; // Number of input files (therefore including command line input as an "input file", if input is to be read from there).
 
 	int has_hyphen = 0; // 1 if the console is one of the places from which to read input, 0 otherwise.
 
