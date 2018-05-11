@@ -1,3 +1,632 @@
+commit 2ad70fe1f1ea50feb148a2fcd1d588957b4ec36b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:17:30 2018 +0200
+
+    Final commit.
+
+ Rapports/LSINF1252___Rapport_Final.pdf |  Bin 0 -> 119928 bytes
+ src/outputs/gitlog.stat                | 1239 ++++++++++++++++++++++++++++++++
+ 2 files changed, 1239 insertions(+)
+
+commit c338e4caac66e97de5f0df2e2ae13a1a4ca4d77f
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:36:01 2018 +0200
+
+    Remake outputs.
+
+ src/outputs/README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 3d5203dcea88fd068458567de9a22ff926209971
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:33:53 2018 +0200
+
+    Fix.
+
+ src/outputs/README.md | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit bf3b940ce34601d72bc47c2bf4706955f5d97aa7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:29:06 2018 +0200
+
+    Removing memory leaks.
+
+ src/gitlog.stat          | 333 ++++++++++++++++++++++++++++++++++++++++++++++-
+ src/libfractal/fractal.c |   8 +-
+ src/main                 | Bin 40688 -> 40664 bytes
+ src/main.c               |  19 ++-
+ src/prodcons/prodcons.c  |  25 ++--
+ 5 files changed, 360 insertions(+), 25 deletions(-)
+
+commit 4f4d553e016ff8534e290fcf68009bcfd07ab9af
+Merge: d4a55e4 b223093
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 14:42:33 2018 +0200
+
+    Fix merge.
+
+commit d4a55e44764b8d244a14021ff6fc20d2ad34e5bc
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 14:41:09 2018 +0200
+
+    Fix output naming in case of multiple best fractals.
+
+ src/inputs/fewsmall.txt |   6 +-
+ src/main                | Bin 40672 -> 40688 bytes
+ src/main.c              |  50 +++++-----
+ src/prodcons/prodcons.c | 239 ++++++++++++++++++++++++------------------------
+ 4 files changed, 144 insertions(+), 151 deletions(-)
+
+commit b2230938c8057f5ce3cdf1d56eaed5d00407db68
+Author: Gilles Peiffer <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 13:18:25 2018 +0200
+
+    Remove bestFract mutex.
+
+ src/main.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+commit 3c6b63638e5b244add4dd2276e3db9ecaa615877
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 10 22:29:22 2018 +0200
+
+    Rename outputs/README.md.
+
+ src/outputs/{readme.md => README.md} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 9b4daf87e7e8c0ec4750475d34edfc0fd6e65911
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 10 22:27:42 2018 +0200
+
+    Fix reading input lines starting with space, octothorpe or newline.
+
+ src/main                | Bin 40648 -> 40672 bytes
+ src/main.c              |   2 +-
+ src/prodcons/prodcons.c |   9 ++++++---
+ 3 files changed, 7 insertions(+), 4 deletions(-)
+
+commit 1342ec0d17af137ec4bf9bf735a5e63a242d3085
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 10 22:20:58 2018 +0200
+
+    Move read_console_input to prodcons.
+
+ src/main                | Bin 40584 -> 40648 bytes
+ src/main.c              |  38 +---------------------------------
+ src/prodcons/prodcons.c |  54 ++++++++++++++++++++++++++++++++++++++++++------
+ src/prodcons/prodcons.h |   7 +++++++
+ 4 files changed, 56 insertions(+), 43 deletions(-)
+
+commit 6fe14b26125cf18856c60066ee5e03b4d8d85562
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 10 22:10:58 2018 +0200
+
+    Add global variables to Makefiles.
+
+ src/Makefile       |  11 +++++++----
+ src/main           | Bin 34288 -> 40584 bytes
+ src/tests/Makefile |   6 ++++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
+
+commit 0659f86c8d520bb9935bd8c309bbf2105959dcf4
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 10 22:06:22 2018 +0200
+
+    Changes to outputs folder, update enonce, changes to inputs.
+
+ Enonce/enonce_v2.pdf      | Bin 0 -> 215539 bytes
+ src/inputs/fewsmall.txt   |   2 +-
+ src/main                  | Bin 32376 -> 34288 bytes
+ src/main.c                |  14 ++--
+ src/outputs/readme.md     |   1 +
+ src/prodcons/#prodcons.c# | 194 ----------------------------------------------
+ 6 files changed, 9 insertions(+), 202 deletions(-)
+
+commit 2468f39a5e9d514aff86da13f1b92eac4d805a79
+Author: Liliya Semerikova <semerikova@maul.info.ucl.ac.be>
+Date:   Thu May 10 16:50:17 2018 +0200
+
+    delete some unnecessary lines, add some comments
+
+ src/main                | Bin 32384 -> 32376 bytes
+ src/main.c              |   6 +-----
+ src/prodcons/prodcons.c |  10 +++-------
+ 3 files changed, 4 insertions(+), 12 deletions(-)
+
+commit 42bd5c428f4884d32a35bb832fc859cb530cb36e
+Author: Liliya Semerikova <semerikova@maul.info.ucl.ac.be>
+Date:   Thu May 10 16:23:38 2018 +0200
+
+    add free best_fractal
+
+ src/main   | Bin 32376 -> 32384 bytes
+ src/main.c |  18 +++++++++++-------
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+commit 1b7d904767dda524a253e6448af4cf1899b0ede5
+Author: Liliya Semerikova <semerikova@maul.info.ucl.ac.be>
+Date:   Thu May 10 15:19:38 2018 +0200
+
+    fix problem with best_fractal
+
+ src/inputs/repeat.txt  |  24 ++++++++++++++++++++-
+ src/inputs/testavg.txt |  55 ++++++++++++++++++++++++++++++++++++++++++-------
+ src/main               | Bin 32328 -> 32376 bytes
+ src/main.c             |  19 ++++++++++-------
+ 4 files changed, 82 insertions(+), 16 deletions(-)
+
+commit 374dc2feabe91688c50a97881f379d307a06a265
+Author: Liliya Semerikova <semerikova@mustafar.info.ucl.ac.be>
+Date:   Thu May 10 01:02:24 2018 +0200
+
+    linked list for max average
+
+ src/inputs/repeat.txt   |   6 +++---
+ src/inputs/testavg.txt  |  14 +++++++-------
+ src/main                | Bin 32152 -> 32328 bytes
+ src/main.c              |  22 ++++++++++++++++++----
+ src/prodcons/prodcons.c |  47 ++++++++++++++++++++++++++++++++++++++---------
+ src/prodcons/prodcons.h |  13 +++++++++++--
+ 6 files changed, 77 insertions(+), 25 deletions(-)
+
+commit 4f8634896ec9a74588258e0a0ca08269db448076
+Author: Liliya Semerikova <semerikova@mustafar.info.ucl.ac.be>
+Date:   Wed May 9 16:52:55 2018 +0200
+
+    fix error : push NULL fractal
+
+ src/main                | Bin 32200 -> 32152 bytes
+ src/prodcons/prodcons.c |   7 +++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+commit b7dced312efbf71378c2baa9e720a2cd322bfa2a
+Merge: 0b12744 ed9c202
+Author: Liliya Semerikova <semerikova@mustafar.info.ucl.ac.be>
+Date:   Wed May 9 16:43:43 2018 +0200
+
+    fix merge conflict and add mutex for duplicates
+
+commit 0b12744ef0143c27bc1fa59e5954fb045e8a0964
+Author: Liliya Semerikova <semerikova@mustafar.info.ucl.ac.be>
+Date:   Wed May 9 16:34:23 2018 +0200
+
+    add mutex for duplicates
+
+ src/main                  | Bin 32163 -> 32200 bytes
+ src/prodcons/#prodcons.c# |   4 ++--
+ src/prodcons/prodcons.c   |  13 ++++++++++---
+ 3 files changed, 12 insertions(+), 5 deletions(-)
+
+commit ed9c202f72062f00a667897aca1b3059f21febe1
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 14:12:08 2018 +0200
+
+    Add small test file.
+
+ src/inputs/fewsmall.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+commit 91a81aa0d2da95012684e72a177c7ad9b195258d
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:58:41 2018 +0200
+
+    Fix double free.
+
+ src/main                | Bin 34064 -> 34032 bytes
+ src/prodcons/prodcons.c |  34 +++++++++++-----------------------
+ src/prodcons/prodcons.h |   5 -----
+ 3 files changed, 11 insertions(+), 28 deletions(-)
+
+commit b4232f67c5ea47e00ffb743d95fdf27f24320b3c
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:49:25 2018 +0200
+
+    Fix spacing, add comments in test.c.
+
+ src/tests/test.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+commit 29fb108664eaaab13f2b311d83e78960afd4487d
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:48:03 2018 +0200
+
+    Remove weird hashtagged files.
+
+ src/libfractal/#tools.c#  | 103 ------------------------
+ src/main                  | Bin 34144 -> 34064 bytes
+ src/prodcons/#prodcons.c# | 194 ----------------------------------------------
+ src/tests/#test.c#        |  88 ---------------------
+ 4 files changed, 385 deletions(-)
+
+commit 859c226566aa9b5dc67375f9aee6012fac5a82a8
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:46:57 2018 +0200
+
+    Add more tests.
+
+ src/prodcons/prodcons.c |   2 +-
+ src/tests/test          | Bin 30848 -> 30976 bytes
+ src/tests/test.c        |  66 ++++++++++++++++++++++++++++++++++++++++--------
+ 3 files changed, 57 insertions(+), 11 deletions(-)
+
+commit 46f43124ff5d7ebc4969823757eb1da2b6944431
+Merge: 6190c63 c680e87
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:32:45 2018 +0200
+
+    Fix duplicata.
+
+commit 6190c6361e95b8ee8c7aadaed258f6944bc6fd5b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 13:32:03 2018 +0200
+
+    Fix duplicata.
+
+ src/main                | Bin 34152 -> 34144 bytes
+ src/main.c              |   2 +-
+ src/prodcons/prodcons.c |  45 +++++++++++++++++++++++++++++++--------------
+ src/prodcons/prodcons.h |  10 ++++++++++
+ 4 files changed, 42 insertions(+), 15 deletions(-)
+
+commit c680e875b0d17be6dc2d542ea6840eeed1c5ab5d
+Author: Liliya Semerikova <semerikova@grievous.info.ucl.ac.be>
+Date:   Wed May 9 13:29:52 2018 +0200
+
+    delete free(name)
+
+ src/Makefile              |   8 +-
+ src/inputs/testavg.txt    |   2 +
+ src/libfractal/#tools.c#  | 103 ++++++++++++++++++++++++
+ src/main                  | Bin 34152 -> 32163 bytes
+ src/prodcons/#prodcons.c# | 194 ++++++++++++++++++++++++++++++++++++++++++++++
+ src/prodcons/.#prodcons.c |   1 +
+ src/prodcons/prodcons.c   |   3 +-
+ src/tests/#test.c#        |  88 +++++++++++++++++++++
+ src/tests/test.c          |  22 +++++-
+ 9 files changed, 415 insertions(+), 6 deletions(-)
+
+commit ad7c191311f5ad4f1fa66c06cafe317d8a2e2c5f
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 10:26:37 2018 +0200
+
+    Fixed tests makefile.
+
+ src/tests/Makefile |   2 +-
+ src/tests/test     | Bin 0 -> 30848 bytes
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+commit e51a2facf23779b8fc74242ce25e0bff46309849
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 10:15:22 2018 +0200
+
+    Fix.
+
+ src/libfractal/tools.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 24798f7f7a9f3bdb308f6e60cf5f84b3a2b2f35d
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 10:11:38 2018 +0200
+
+    Fix.
+
+ src/libfractal/tools.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit d4a254f0baf9e40cad415f7a32227c9d8f89f1d7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 10:02:42 2018 +0200
+
+    Added file to test for repeats.
+
+ src/inputs/repeat.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 914907480715089573b9860c8b418bce3bd1ceb0
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 08:33:26 2018 +0200
+
+    Added first tests, work on makefiles.
+
+ src/Makefile       | 11 ++++-----
+ src/tests/Makefile |  8 ++++++
+ src/tests/test.c   | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+), 6 deletions(-)
+
+commit 71d8a85d0cc578c6fa244b95b83409632dc6aafe
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Wed May 9 08:07:03 2018 +0200
+
+    Changed comments and variable names in prodcons.c, fixed output for calls outside of the project (src) folder.
+
+ src/gitlog.stat         | 877 ++++++++++++++++++++++++++++++++++++++++++++++++
+ src/main                | Bin 34072 -> 34152 bytes
+ src/main.c              |  13 +-
+ src/prodcons/prodcons.c |  39 ++-
+ src/prodcons/prodcons.h |   6 +-
+ 5 files changed, 912 insertions(+), 23 deletions(-)
+
+commit 85e6393c408d36c67d62b3b1f4e37e52e5adf6c6
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-253.sri.ucl.ac.be>
+Date:   Tue May 8 22:25:25 2018 +0200
+
+    correction de methode qui check les duplicatas, mais ça marche toujours pas :(
+
+ src/.DS_Store           | Bin 8196 -> 8196 bytes
+ src/prodcons/prodcons.c |   8 +++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit c58dc31ecbfa4beb36b12c4ce80231169d078130
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-336.sri.ucl.ac.be>
+Date:   Tue May 8 12:37:53 2018 +0200
+
+    checker les doublons dans le line_to_fractal; fonctionne pas bien encore
+
+ .DS_Store               | Bin 8196 -> 8196 bytes
+ src/.DS_Store           | Bin 6148 -> 8196 bytes
+ src/prodcons/prodcons.c |  24 +++++++++++++++++++++++-
+ src/prodcons/prodcons.h |   5 +++++
+ 4 files changed, 28 insertions(+), 1 deletion(-)
+
+commit 3a433f155a07ce8d9a2b40b9fd75cab7b75ef91c
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 22:54:05 2018 +0200
+
+    Redirect outputs to the output file.
+
+ src/main                | Bin 33944 -> 34072 bytes
+ src/main.c              |   8 +++++---
+ src/prodcons/prodcons.c |  20 +++++++++++++++++++-
+ 3 files changed, 24 insertions(+), 4 deletions(-)
+
+commit 9a68fc86ceb778a5466119598ae42884fcc8901b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 20:47:22 2018 +0200
+
+    Removed test printf's.
+
+ src/Test/Text.c         | 144 ------------------------------------------------
+ src/Test/Text.h         |  13 -----
+ src/main                | Bin 33968 -> 33944 bytes
+ src/main.c              |  22 ++++----
+ src/prodcons/prodcons.c |  14 ++---
+ 5 files changed, 17 insertions(+), 176 deletions(-)
+
+commit 899175fa7041fe7b385567a2fa1ae025e3009fdc
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 19:05:27 2018 +0200
+
+    Renamed inputs.
+
+ src/{fract_inputs/02input_fewbig.txt => inputs/fewbig.txt}       | 0
+ src/{fract_inputs/03input_manysmall.txt => inputs/manysmall.txt} | 0
+ src/{fract_inputs/01input_testavg.txt => inputs/testavg.txt}     | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 339600a12484b073de80711d974c36f64ce70ffd
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 19:04:23 2018 +0200
+
+    Added inputs.
+
+ src/fract_inputs/01input_testavg.txt   |       5 +
+ src/fract_inputs/02input_fewbig.txt    |    1000 +
+ src/fract_inputs/03input_manysmall.txt | 1000000 +++++++++++++++++++++++++++++
+ src/main                               |     Bin 33968 -> 33968 bytes
+ src/prodcons/prodcons.c                |       2 +-
+ 5 files changed, 1001006 insertions(+), 1 deletion(-)
+
+commit 3f858441ac9926ac16110405dbcf8c7025693a76
+Merge: c1fcf69 a0cfa4e
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 18:58:05 2018 +0200
+
+    Fix merge.
+
+commit c1fcf69edc5bc2a9a296c124bc65b5ab473e3401
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 18:57:04 2018 +0200
+
+    Fixed input from files.
+
+ src/Makefile             |   2 +-
+ src/libfractal/tools.c   |   3 +--
+ src/main                 | Bin 34160 -> 33968 bytes
+ src/main.c               |  29 ++++++++++++++++++++++-------
+ src/prodcons/prodcons.c  |   4 +++-
+ src/testinputs/test1.txt |   3 ---
+ 6 files changed, 27 insertions(+), 14 deletions(-)
+
+commit a0cfa4eb49943d300d12701fb2e0e0fc83092231
+Merge: 2d41011 be86ea7
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-161.sri.ucl.ac.be>
+Date:   Sun May 6 18:31:42 2018 +0200
+
+    fix SDL problem
+
+commit be86ea735037bafbf6c81f36fb0537df1513044b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 17:36:11 2018 +0200
+
+    Fixed some issues in fractal.c, fixed d_position globally.
+
+ src/libfractal/fractal.c |  29 +++++++++++----
+ src/libfractal/fractal.h |   4 +--
+ src/main                 | Bin 34064 -> 34160 bytes
+ src/main.c               |  91 +++++++++++++++++++++++++++++++++--------------
+ src/main.h               |   1 -
+ src/prodcons/prodcons.c  |  48 +++----------------------
+ src/prodcons/prodcons.h  |   7 ----
+ src/testinputs/test1.txt |   5 +--
+ 8 files changed, 96 insertions(+), 89 deletions(-)
+
+commit 2d410111a90b54bf38574ea2f246ce13803f3173
+Author: Лилия Семерикова <liliasemerikova@wifi-student4-161.sri.ucl.ac.be>
+Date:   Sun May 6 16:31:33 2018 +0200
+
+    fix problem with SDL
+
+ src/Makefile           | 2 +-
+ src/libfractal/tools.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 67e7b1b49e71c595c56389f962754400ff710aa6
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sun May 6 01:49:27 2018 +0200
+
+    Various fixes.
+
+ src/Makefile                |   8 ++---
+ src/fractstack/fractstack.c |  27 ++++++++++++---
+ src/fractstack/fractstack.h |   5 +++
+ src/libfractal/fractal.c    |   8 +----
+ src/main                    | Bin 34184 -> 34064 bytes
+ src/main.c                  |  82 ++++++++++++++++++++------------------------
+ src/main.h                  |   1 -
+ src/prodcons/prodcons.c     |  38 ++++++++++++++------
+ src/prodcons/prodcons.h     |   1 +
+ 9 files changed, 97 insertions(+), 73 deletions(-)
+
+commit 91bbc3a0d3d5f63933224e78ce142337f4f32932
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 23:09:58 2018 +0200
+
+    Changes to gitignore.
+
+ .gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 9d98715e26ca475bf739abcd01bdd3cc3fc2ef8d
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 23:09:01 2018 +0200
+
+    Add .bmp files to gitignore, general fixes.
+
+ src/libfractal/fractal.c |   3 +-
+ src/main                 | Bin 34224 -> 34184 bytes
+ src/main.c               |   2 +-
+ src/prodcons/prodcons.c  |  93 +++++++++++++++++++++++++----------------------
+ 4 files changed, 52 insertions(+), 46 deletions(-)
+
+commit 6447f9021db32dda2b0b4721ca89bd04c5383ec7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 21:01:24 2018 +0200
+
+    Various fixes.
+
+ src/main                | Bin 34656 -> 34224 bytes
+ src/main.c              |  22 ++++++++++++++++++----
+ src/prodcons/prodcons.c |  18 +++++++++++-------
+ 3 files changed, 29 insertions(+), 11 deletions(-)
+
+commit 9636eed4bba0ab7030d439248b4f645aaf63681c
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 21:01:04 2018 +0200
+
+    Added testinputs.
+
+ src/testinputs/test1.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 86b990b53bd64a9eb76257fed14127a94f284b2b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 21:00:30 2018 +0200
+
+    Renamed variables to follow snake_case.
+
+ src/libfractal/fractal.c | 39 ++++++++++++++++++++++-----------------
+ src/libfractal/fractal.h | 10 +++++-----
+ 2 files changed, 27 insertions(+), 22 deletions(-)
+
+commit 548a7b3e6f33b8d48fe67a770a951071c2061059
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 18:01:33 2018 +0200
+
+    Removed average and computed attributes from the fractal struct.
+
+ src/libfractal/fractal.c | 22 ----------------------
+ src/libfractal/fractal.h | 38 ++------------------------------------
+ 2 files changed, 2 insertions(+), 58 deletions(-)
+
+commit e9eb2d0e6512aa9cd4287242ffe6506a72472ddb
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 16:19:34 2018 +0200
+
+    Fixes to main and prodcons.
+
+ src/main                 | Bin 34592 -> 34656 bytes
+ src/main.c               |  23 +++++++++++++++++++----
+ src/prodcons/prodcons.c  |   4 ++--
+ src/testinputs/test1.txt |   3 ---
+ 4 files changed, 21 insertions(+), 9 deletions(-)
+
+commit 4807a85e03be4f6caffb83d2b5ddc675bd46e8b3
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 13:38:18 2018 +0200
+
+    Fix some issues in main, added some printf's to see if the program works correctly. It doesn't :'(.
+
+ src/main   | Bin 0 -> 34592 bytes
+ src/main.c |  17 +++++++++++++----
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+commit 357f32f01af2e98f5237221e5ff91ee26e6792e5
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 13:37:39 2018 +0200
+
+    Added a folder with test inputs.
+
+ src/testinputs/test1.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+commit 9da6d4d2aadbefecf6fa2d7663bcbf5aca83264a
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Sat May 5 13:37:18 2018 +0200
+
+    Fixed has_next, removed the need for stdbool by making it an integer.
+
+ src/Makefile            | 2 +-
+ src/libfractal/tools.c  | 3 ++-
+ src/prodcons/prodcons.c | 5 ++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+commit f666a1880f8966cf236cfd9bfbf5eabe4eb5cf4b
+Merge: c9468b6 58d54f0
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri May 4 20:12:39 2018 +0200
+
+    Remove fmax usage from main.c.
+
+commit c9468b62b14fa081154b158332f4ebe447079b71
+Author: Peiffap <gilles.peiffer@hotmail.com>
+Date:   Fri May 4 20:10:05 2018 +0200
+
+    merge
+
+ src/.DS_Store | Bin 6148 -> 6148 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 58d54f0dc5cfcc50bb37e2c257ba740bebc3b18e
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 4 19:03:35 2018 +0200
+
+    Fix error in average computation in prodcons.
+
+ src/Makefile            | 2 +-
+ src/prodcons/prodcons.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 7d4889eb17b314687b930e4da295d7d36db109f7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Thu May 3 23:46:36 2018 +0200
+
+    Update gitlog.stat.
+
+ gitlog.stat | 113 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
+
 commit 96729e2db473e49da32a0efed1ee9738d564e639
 Author: gp <gilles.peiffer@hotmail.com>
 Date:   Thu May 3 23:43:32 2018 +0200
