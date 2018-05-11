@@ -1,3 +1,26 @@
+commit 3a8ca22eaeb7359c1b5ae8dc3b2df46514571921
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:46:49 2018 +0200
+
+    Finalize gitlog.stat.
+
+ fractal_55_SEMERIKOVA_PEIFFER/Makefile |   1 -
+ fractal_55_SEMERIKOVA_PEIFFER/main     | Bin 0 -> 40720 bytes
+ 2 files changed, 1 deletion(-)
+
+commit 43a5a3ec30fa094aad3ae3304bd9a5c356938b1d
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:43:53 2018 +0200
+
+    Fix submission erros.
+
+ fractal_55_SEMERIKOVA_PEIFFER/Makefile             |   2 +-
+ fractal_55_SEMERIKOVA_PEIFFER/gitlog.stat          |  52 +++++++++++++++++++++
+ fractal_55_SEMERIKOVA_PEIFFER/main                 | Bin 40680 -> 0 bytes
+ ...ikova@grievous.info.ucl.ac.be.581715:1524820524 |   0
+ .../{Rapport.pdf => rapport.pdf}                   | Bin
+ 5 files changed, 53 insertions(+), 1 deletion(-)
+
 commit a5b11f4050f63f60f950a884f3428469e9e52e62
 Author: gp <gilles.peiffer@hotmail.com>
 Date:   Fri May 11 16:31:22 2018 +0200
