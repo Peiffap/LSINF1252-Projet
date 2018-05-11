@@ -212,26 +212,25 @@ int main(int argc, const char *argv[])
 
 	while (headBestFractal != NULL)
 	{
-
-		size_t len = strlen(fractal_get_name(headBestFractal->f));
-		char *tempbis = strdup(argv[argc - 1]);
-		char *temp = malloc((len + 1 + 5 + 9 + lenbis + strlen(tempbis) + 1 + 2) * sizeof(char));
-		strncpy(temp, fractal_get_name(headBestFractal->f), len + 1);
+		const char *t = fractal_get_name(headBestFractal->f);
+		size_t len = strlen(t);
+		char *temp = malloc((len + 4 + 8 + lenbis + strlen(argv[argc - 1]) + 1 + 1) * sizeof(char));
+		strncpy(temp, t, len + 1);
 		prepend(temp, "_");
-		prepend(temp, tempbis);
+		prepend(temp, argv[argc - 1]);
 		prepend(temp, "outputs/");
 		prepend(temp, path);
 		printf("%s \n", temp);
 
 
 		write_bitmap_sdl(headBestFractal->f, strcat(temp, ".bmp"));
-		printf("The fractal with the highest average number of iterations was %s. \n", fractal_get_name(headBestFractal->f));
+		printf("The fractal with the highest average number of iterations was %s. \n", t);
 		run = headBestFractal;
-		headBestFractal=headBestFractal->next;
-		free(run->f);
+		headBestFractal = headBestFractal->next;
+		fractal_free(run->f);
 		free(run);
 		free(temp);
-		free(tempbis);
+		free((void *) t);
 	}
 
 	free(path);

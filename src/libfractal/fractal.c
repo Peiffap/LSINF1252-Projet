@@ -37,15 +37,21 @@ struct fractal *fractal_new(const char *name, int width, int height, double a, d
     if (data == NULL)
     {
 		printf("Error in first array malloc in fractal_new. \n");
+		free(new_fractal->the_name);
         return NULL;
     }
-    int i;
+    int i, j;
     for (i = 0; i < width; ++i)
     {
         data[i] = malloc(height * sizeof(int)); // Allocate each entry in the array allocated above.
         if (data[i] == NULL)
         {
 			printf("Error in second array malloc in fractal_new. \n");
+			for (j = 0; j < i; ++j)
+			{
+				free(data[j]);
+			}
+			free(data);
             return NULL;
         }
     }

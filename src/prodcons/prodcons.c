@@ -17,7 +17,7 @@ pthread_mutex_t duplicate; // Mutex to control access to the linked list "check_
 int d_position;
 static double best_avg = 0.0;
 
-static check_list *headDucplicate = NULL;
+static check_list *head_duplicate = NULL;
 struct best_fractal *headBestFractal = NULL;
 
 
@@ -52,7 +52,7 @@ void *read_file_input(void *file_name)
 			if (*fractal_line != '\n' && *fractal_line != '#' && *fractal_line!= ' ')
 			{
 				struct fractal *new_fractal = line_to_fractal(fractal_line);
-				if(new_fractal != NULL){
+				if (new_fractal != NULL) {
 					push(new_fractal); // Convert the line to a pointer to a fractal struct and add the fractal to the stack.
 				}
 			}
@@ -137,12 +137,13 @@ struct fractal *line_to_fractal(const char *line)
 	if (err != 5)
 	{
 		printf("Error in sscanf in line_to_fractal. \n");
+		free(name);
 		return NULL;
 	}
 
 	pthread_mutex_lock(&duplicate);
 	// Iterate over list to see if the fractal already exists
-	struct check_list *run = headDucplicate;
+	struct check_list *run = head_duplicate;
 	while (run != NULL)
 	{
 		// Returns 0 if the fractal already exists.
@@ -160,12 +161,13 @@ struct fractal *line_to_fractal(const char *line)
 	if (new_name == NULL)
 	{
 		printf("Error with malloc in check_list add. \n");
+		free(name);
 		return NULL;
 	}
 
 	new_name->val = name;
-	new_name->next = headDucplicate;
-	headDucplicate = new_name;
+	new_name->next = head_duplicate;
+	head_duplicate = new_name;
 
 	pthread_mutex_unlock(&duplicate);
 
@@ -188,9 +190,6 @@ void prepend(char* s, const char* t)
 		s[i] = t[i];
 	}
 }
-
-
-
 
 /**
 * Computes the values of every pixel for a fractal taken from the stack, stores them in an array and stores the average value in one of the fractal's attributes.
@@ -222,10 +221,11 @@ void *compute_fractal(void *p)
 		// If d_position isn't equal to zero then it means the [-d] was present and that a bmp file should be generated for every fractal.
 		if (d_position != 0)
 		{
-			size_t len = 65;
-			char *temp = malloc((len + 5 + 9 + strlen(path)) * sizeof(char));
+			size_t len = 64;
+			char *temp = malloc((len + 4 + 8 + strlen(path) + 1) * sizeof(char));
 			// printf("Currently computing %s. \n", fractal_get_name(fract));
-			strncpy(temp, fractal_get_name(fract), len);
+			const char *t = fractal_get_name(fract);
+			strncpy(temp, t, len);
 			prepend(temp, "outputs/");
 			prepend(temp, path);
 			// printf("%s \n", temp);
@@ -239,7 +239,7 @@ void *compute_fractal(void *p)
 		{
 			printf("A fractal with a higher/equal average (%f >= %f) has been found. \n", avg, best_avg);
 			//If this fractal has a higher average, free stack
-			if(avg != best_avg)
+			if (avg != best_avg)
 			{
 				struct best_fractal* tmp;
 
@@ -261,7 +261,6 @@ void *compute_fractal(void *p)
 			}
 
 			new_node->f = fract;
-
 			new_node->next = headBestFractal;
 			headBestFractal = new_node;
 		}
