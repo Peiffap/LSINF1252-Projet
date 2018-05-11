@@ -1,3 +1,55 @@
+commit a5b11f4050f63f60f950a884f3428469e9e52e62
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:31:22 2018 +0200
+
+    Add submission.
+
+ fractal_55_SEMERIKOVA_PEIFFER/Makefile             |      32 +
+ fractal_55_SEMERIKOVA_PEIFFER/Rapport.pdf          |     Bin 0 -> 119928 bytes
+ .../fractstack/fractstack.c                        |     145 +
+ .../fractstack/fractstack.h                        |      53 +
+ fractal_55_SEMERIKOVA_PEIFFER/gitlog.stat          |    1249 +
+ fractal_55_SEMERIKOVA_PEIFFER/inputs/fewbig.txt    |    1000 +
+ fractal_55_SEMERIKOVA_PEIFFER/inputs/fewsmall.txt  |       3 +
+ fractal_55_SEMERIKOVA_PEIFFER/inputs/manysmall.txt | 1000000 +++++++++++++++++
+ fractal_55_SEMERIKOVA_PEIFFER/inputs/repeat.txt    |      25 +
+ fractal_55_SEMERIKOVA_PEIFFER/inputs/testavg.txt   |      48 +
+ fractal_55_SEMERIKOVA_PEIFFER/libfractal/Makefile  |      15 +
+ fractal_55_SEMERIKOVA_PEIFFER/libfractal/fractal.c |     110 +
+ fractal_55_SEMERIKOVA_PEIFFER/libfractal/fractal.h |     117 +
+ fractal_55_SEMERIKOVA_PEIFFER/libfractal/tools.c   |     103 +
+ fractal_55_SEMERIKOVA_PEIFFER/main                 |     Bin 0 -> 40680 bytes
+ fractal_55_SEMERIKOVA_PEIFFER/main.c               |     247 +
+ fractal_55_SEMERIKOVA_PEIFFER/main.h               |       8 +
+ fractal_55_SEMERIKOVA_PEIFFER/outputs/README.md    |       1 +
+ .../prodcons/.#prodcons.c                          |       1 +
+ fractal_55_SEMERIKOVA_PEIFFER/prodcons/prodcons.c  |     273 +
+ fractal_55_SEMERIKOVA_PEIFFER/prodcons/prodcons.h  |      54 +
+ fractal_55_SEMERIKOVA_PEIFFER/tests/Makefile       |      10 +
+ fractal_55_SEMERIKOVA_PEIFFER/tests/test           |     Bin 0 -> 30976 bytes
+ fractal_55_SEMERIKOVA_PEIFFER/tests/test.c         |     138 +
+ 24 files changed, 1003632 insertions(+)
+
+commit 442fb3a5185f6fca5d5afa33f2f4552fe9f24616
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:30:27 2018 +0200
+
+    Add submission.
+
+ Rapports/LSINF1252___Rapport_Final.pdf | Bin 119928 -> 0 bytes
+ fractal_55_SEMERIKOVA_PEIFFER.zip      | Bin 0 -> 2824791 bytes
+ src/gitlog.stat                        |  41 +++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+
+commit 875b9cf72daea79f7b3849d43bff634b59b52b2e
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:17:51 2018 +0200
+
+    Update gitlog.stat.
+
+ gitlog.stat | 629 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 629 insertions(+)
+
 commit 2ad70fe1f1ea50feb148a2fcd1d588957b4ec36b
 Author: gp <gilles.peiffer@hotmail.com>
 Date:   Fri May 11 16:17:30 2018 +0200

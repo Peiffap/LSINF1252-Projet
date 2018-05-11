@@ -27,6 +27,6 @@ lib:
 	make clean
 
 clean:
-	rm -rf *.o libfractal/*.o libfractal/*.a tests/*.o fractstack/*.o prodcons/*.o
+	rm -rf *.o libfractal/*.o libfractal/*.a tests/*.o fractstack/*.o prodcons/*.o main
 
 .SILENT:
