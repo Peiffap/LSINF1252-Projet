@@ -1,3 +1,44 @@
+commit 2ad70fe1f1ea50feb148a2fcd1d588957b4ec36b
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 16:17:30 2018 +0200
+
+    Final commit.
+
+ Rapports/LSINF1252___Rapport_Final.pdf |  Bin 0 -> 119928 bytes
+ src/outputs/gitlog.stat                | 1239 ++++++++++++++++++++++++++++++++
+ 2 files changed, 1239 insertions(+)
+
+commit c338e4caac66e97de5f0df2e2ae13a1a4ca4d77f
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:36:01 2018 +0200
+
+    Remake outputs.
+
+ src/outputs/README.md | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 3d5203dcea88fd068458567de9a22ff926209971
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:33:53 2018 +0200
+
+    Fix.
+
+ src/outputs/README.md | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit bf3b940ce34601d72bc47c2bf4706955f5d97aa7
+Author: gp <gilles.peiffer@hotmail.com>
+Date:   Fri May 11 15:29:06 2018 +0200
+
+    Removing memory leaks.
+
+ src/gitlog.stat          | 333 ++++++++++++++++++++++++++++++++++++++++++++++-
+ src/libfractal/fractal.c |   8 +-
+ src/main                 | Bin 40688 -> 40664 bytes
+ src/main.c               |  19 ++-
+ src/prodcons/prodcons.c  |  25 ++--
+ 5 files changed, 360 insertions(+), 25 deletions(-)
+
 commit 4f4d553e016ff8534e290fcf68009bcfd07ab9af
 Merge: d4a55e4 b223093
 Author: gp <gilles.peiffer@hotmail.com>
