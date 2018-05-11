@@ -2,7 +2,6 @@ CC=gcc
 CFLAGS=-g -Wall
 
 all: main
-	make clean
 
 main: main.o fractstack/fractstack.o prodcons/prodcons.o
 	cd libfractal && make
